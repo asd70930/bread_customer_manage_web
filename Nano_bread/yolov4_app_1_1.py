@@ -7,6 +7,7 @@ from PIL import Image
 import io
 import json
 from geometry_area_cv import Fill_geometry
+from shapely.geometry import Polygon
 
 
 class Timer:
@@ -136,11 +137,23 @@ def inference_area(base64_data, ROI_points):
     darknet_image = darknet.make_image(w, h, 3)
     bboxes, labels, classes_and_confidence = YOLO_detection(image, darknet_image)
     datas = []
-    points = []
+    dot = []
     num = 0
 
-    # for single roi
-    cv2.rectangle(image, (ROI_points[0][0], ROI_points[0][1]), (ROI_points[2][0], ROI_points[2][1]), (0, 0, 255), 2)
+    # for rectangle roi
+    # cv2.rectangle(image, (ROI_points[0][0], ROI_points[0][1]), (ROI_points[2][0], ROI_points[2][1]), (0, 0, 255), 2)
+
+    # for all kind of roi in four points
+    # dot = [(ROI_points[0][0], ROI_points[0][1]), (ROI_points[1][0], ROI_points[1][1]),
+    #        (ROI_points[2][0], ROI_points[2][1]), (ROI_points[3][0], ROI_points[3][1]), ]
+    # for i in range(len(dot)):
+    #     cv2.line(image, dot[i - 1], dot[i], (0, 0, 255), 2)
+
+    # for any points
+    for i in range(len(ROI_points)):
+        dot.append((ROI_points[i][0], ROI_points[i][1]))
+    for i in range(len(dot)):
+        cv2.line(image, dot[i - 1], dot[i], (0, 0, 255), 2)
 
     area = Fill_geometry(h, w, ROI_points)
 
@@ -150,22 +163,49 @@ def inference_area(base64_data, ROI_points):
         # Clockwise A B C D from the upper left
         A, B, C, D = [boxes[1], boxes[0]], [boxes[3], boxes[0]], [boxes[3], boxes[2]], [boxes[1], boxes[2]]
         anchors = [A, B, C, D]
+        print('origin anchors: ', anchors)
         id = get_id(obj_classes[0])
         text = obj_classes[0] + " " + str(int(obj_classes[1] * 100)) + "%"
         # text = str(int(obj_classes[1] * 100)) + "%"
         # print(text)
 
-        # for only rectangle
-        if boxes[0] < ROI_points[0][1]:
-            boxes[0] = ROI_points[0][1]
-        if boxes[1] < ROI_points[0][0]:
-            boxes[1] = ROI_points[0][0]
-        if boxes[2] > ROI_points[2][1]:
-            boxes[2] = ROI_points[2][1]
-        if boxes[3] > ROI_points[2][0]:
-            boxes[3] = ROI_points[2][0]
+        # if ROI_points[0][0] == ROI_points[3][0] and ROI_points[0][1] == ROI_points[1][1] and ROI_points[1][0] == \
+        #         ROI_points[2][0] and ROI_points[3][1] == ROI_points[2][1]:
+        #     # print('rectangle')
+        #     # for only rectangle
+        #
+        #     print('origin rectangle ', boxes[0], boxes[1], boxes[2], boxes[3])
+        #     if boxes[0] < ROI_points[0][1]:
+        #         boxes[0] = ROI_points[0][1]
+        #     if boxes[1] < ROI_points[0][0]:
+        #         boxes[1] = ROI_points[0][0]
+        #     if boxes[2] > ROI_points[2][1]:
+        #         boxes[2] = ROI_points[2][1]
+        #     if boxes[3] > ROI_points[2][0]:
+        #         boxes[3] = ROI_points[2][0]
+        #
+        #     print('new rectangle ', boxes[0], boxes[1], boxes[2], boxes[3])
+        #
+        #     cv2.rectangle(image, (boxes[1], boxes[0]), (boxes[3], boxes[2]), (0, 255, 0), 2)
+        #
+        # else:
+            # for not rectangle
 
-        cv2.rectangle(image, (boxes[1], boxes[0]), (boxes[3], boxes[2]), (0, 255, 0), 2)
+        roi_point = Polygon(dot)
+        box = anchors
+        box_point = Polygon(box)
+        real_point = []
+        if roi_point.intersects(box_point):
+            x = roi_point.intersection(box_point)
+            for a, b in x.exterior.coords:
+                real_point.append((int(a), int(b)))
+            del real_point[0]
+            real_point = real_point[::-1]
+            for i in range(len(real_point)):
+                cv2.line(image, real_point[i - 1], real_point[i], (255, 0, 0), 2)
+
+        # cv2.rectangle(image, (boxes[1], boxes[0]), (boxes[3], boxes[2]), (0, 255, 0), 2)
+        print('after anchors: ', anchors)
         cv2.putText(image, text, (boxes[1], boxes[0] - 5), cv2.FONT_HERSHEY_DUPLEX, 0.6, (0, 0, 255), 1)
         area.obj_points_to_fill(anchors)
         position = [boxes[1], boxes[0]], [boxes[3], boxes[0]], [boxes[3], boxes[2]], [boxes[1], boxes[2]]
