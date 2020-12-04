@@ -36,10 +36,15 @@ def convertBack(x, y, w, h):
     return xmin, ymin, xmax, ymax
 
 
-configPath = "../../darknet-master/backup/bread10_0916/bread10_0916_yolov4.cfg"
-weightPath = "../../darknet-master/backup/bread10_0916/model/bread10_0916_yolov4_last.weights"
-metaPath = "../../darknet-master/backup/bread10_0916/bread10_0916.data"
-classPath = "../../darknet-master/backup/bread10_0916/classes.txt"
+# configPath = "../../darknet-master/backup/bread10_0916/bread10_0916_yolov4.cfg"
+# weightPath = "../../darknet-master/backup/bread10_0916/model/bread10_0916_yolov4_last.weights"
+# metaPath = "../../darknet-master/backup/bread10_0916/bread10_0916.data"
+# classPath = "../../darknet-master/backup/bread10_0916/classes.txt"
+
+configPath = "../../darknet-master/backup/starbuck12/starbuck12_yolov4.cfg"
+weightPath = "../../darknet-master/backup/starbuck12/model/starbuck12_yolov4_final.weights"
+metaPath = "../../darknet-master/backup/starbuck12/starbuck12.data"
+classPath = "../../darknet-master/backup/starbuck12/classes.txt"
 
 netMain = darknet.load_net_custom(configPath.encode("ascii"), weightPath.encode("ascii"), 0, 1)
 metaMain = darknet.load_meta(metaPath.encode("ascii"))
@@ -163,7 +168,7 @@ def inference_area(base64_data, ROI_points):
         # Clockwise A B C D from the upper left
         A, B, C, D = [boxes[1], boxes[0]], [boxes[3], boxes[0]], [boxes[3], boxes[2]], [boxes[1], boxes[2]]
         anchors = [A, B, C, D]
-        print('origin anchors: ', anchors)
+        # print('origin anchors: ', anchors)
         id = get_id(obj_classes[0])
         text = obj_classes[0] + " " + str(int(obj_classes[1] * 100)) + "%"
         # text = str(int(obj_classes[1] * 100)) + "%"
@@ -205,7 +210,7 @@ def inference_area(base64_data, ROI_points):
                 cv2.line(image, real_point[i - 1], real_point[i], (255, 0, 0), 2)
 
         # cv2.rectangle(image, (boxes[1], boxes[0]), (boxes[3], boxes[2]), (0, 255, 0), 2)
-        print('after anchors: ', anchors)
+        # print('after anchors: ', anchors)
         cv2.putText(image, text, (boxes[1], boxes[0] - 5), cv2.FONT_HERSHEY_DUPLEX, 0.6, (0, 0, 255), 1)
         area.obj_points_to_fill(anchors)
         position = [boxes[1], boxes[0]], [boxes[3], boxes[0]], [boxes[3], boxes[2]], [boxes[1], boxes[2]]
@@ -222,7 +227,7 @@ def inference_area(base64_data, ROI_points):
         num = num + 1
 
     area_result = area.area_ratio()
-    print("面積比率 : {}%".format(int(area_result)))
+    print("area ratio : {}%".format(int(area_result)))
     area.clear_mask()
 
     cv2.imwrite('area.jpg', image)
