@@ -1,0 +1,12 @@
+[Unit]
+Description=YOLO_app
+After=network.target
+	 
+[Service]
+User=quantum
+ExecStart=/home/quantum/Downloads/darknet-master/monitorRestart.sh
+Restart=always
+RestartSec=3s
+ 
+[Install]
+WantedBy=multi-user.target
