@@ -1,0 +1,10 @@
+# 更新開機設定檔
+sudo systemctl daemon-reload
+sudo systemctl restart app.service
+sudo systemctl status app.service
+
+# 查看log 從最下面開始
+journalctl -eu app.service
+
+# 修改檔案內容
+sudo vim /lib/systemd/system/app.service
