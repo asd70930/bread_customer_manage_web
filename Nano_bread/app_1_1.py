@@ -1,7 +1,7 @@
 from flask import Flask, request
 import yolov4_app_1_1
 import json
-import numpy as np
+import logging
 
 app = Flask(__name__)
 
@@ -124,6 +124,7 @@ def confidence():
 def area():
     if request.method == 'POST':
         data = request.json
+        # app.logger.debug('input data: %s' % (data))
         if data['function'] == 'area':
             b64 = data['values']['b64string']
             try:
@@ -174,4 +175,10 @@ def area():
 
 
 if __name__ == '__main__':
+    # app.debug = True
+    # handler = logging.FileHandler('log/flask.log', encoding='UTF-8')
+    # handler.setLevel(logging.DEBUG)
+    # logging_format = logging.Formatter("%(asctime)s flask %(levelname)s %(message)s")
+    # handler.setFormatter(logging_format)
+    # app.logger.addHandler(handler)
     app.run(host='0.0.0.0', debug=True)

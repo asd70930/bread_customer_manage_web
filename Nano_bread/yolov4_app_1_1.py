@@ -65,7 +65,7 @@ def YOLO_detection(image, darknet_image):
     frame_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     timer.start()
     darknet.copy_image_from_bytes(darknet_image, frame_rgb.tobytes())
-    detections = darknet.detect_image(netMain, metaMain, darknet_image, thresh=0.25)
+    detections = darknet.detect_image(netMain, metaMain, darknet_image, thresh=0.8)
     z_box_list = []
     object_type_list = []
     labels = 0
