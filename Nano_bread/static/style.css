@@ -1,0 +1,18 @@
+.uploadPreview {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    pointer-events: none;
+}
+.faceBorder{
+    position: absolute;
+    border: 2px solid blue;
+}
+.divUpload{
+    width: 300px;
+    height: 300px;
+}

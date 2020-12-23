@@ -1,0 +1,117 @@
+{% extends "login_base.html" %}
+{% block title %}{% endblock %}
+{% block page_content %}
+
+<link rel=stylesheet type="text/css" href="{{ url_for('static', filename = 'first_page.css') }}">
+
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-1 h-m">
+                <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                    <button type="button" class="btn btn-secondary btn-lg" id="syBt_3">服務清單</button>
+                    <button type="button" class="btn btn-secondary btn-lg" id="syBt_4">訂單管理</button>
+                </div>
+            </div>
+
+            <!---->
+            <article id="table-1" class="col-lg-10 h-title" style="">
+                <div class="title mb-3">服務清單</div>
+                <div class="">
+                    <button class="btn btn-outline-danger" id="tb1_bt1">商品清單</button>
+                    <button class="btn btn-outline-danger">辨識紀錄</button>
+                    <button class="btn btn-outline-danger" onClick="goRecognitionPage()">辨識測試</button>
+                    <button class="btn btn-outline-danger">攝影機調整</button>
+                </div>
+            </article>
+
+            <article id="table-2" class="col-lg-10 h-title" style="display:none;">
+                <div class="mb-3">
+                    <button class="btn btn-outline-danger">新增商品</button>
+                    <button class="btn btn-outline-danger">刪除商品</button>
+                </div>
+                <div class="h-table" id="table1">
+                    <table class="table">
+                        <thead>
+                            <tr style="color:white;text-align:center;">
+                                <th class="width-4 position-r"></th>
+                                <th class="width-18 ">商品編號/條碼</th>
+                                <th class="width-10 ">商品主圖</th>
+                                <th class="width-25 ">商品名稱</th>
+                                <th class="width-15 ">備註資訊</th>
+                                <th class="width-10 ">圖資數量</th>
+                                <th class="width-5 ">狀態</th>
+                                <th class="width-13 ">管理</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table_body hover-orange">
+
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+<!--     customer_editProductData             -->
+            <article id="table-5" class="col-lg-10 h-title" style="display:none;">
+
+
+            </article>
+
+<!--     reveal_customer_productdataimg             -->
+            <article id="table-6" class="col-lg-10 h-title" style="display:none;">
+            </article>
+
+
+
+
+<!--    modal customer add images to product      -->
+            <div class="modal fade" id="modal1"  tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">上傳圖片</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                          <h4 class="p-l-15">
+                                總圖資數:
+                              <span id="imageCount">3</span>
+                          </h4>
+                          <form class="row m-15">
+                            <div class="layout-5">
+                                <label class="btn btn-primary bt_font f-l ">
+                                選擇圖片<input class="" hidden id="customerUploadImg" type="file" accept="image/*" multiple>
+                                </label>
+                                <p class="f-l ml-3"><p>
+                            </div>
+                            <ul class="layout-5">
+                                <li>1. 最小圖片尺寸 200x200 pixels</li>
+                                <li>2. 圖片支援格式 jpg, jpeg, png, svg</li>
+                            </ul>
+                          </form>
+
+                          <div class="layout-style-1 layout-y-scroll">
+                            <ul id="uploadLayout" class="images-list-x flex-w px-3">
+                            </ul>
+                          </div>
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="productImageSave(this)" id="bt_saveImage">存檔</button>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</div>
+
+</body>
+
+<script src="{{url_for('static', filename='first_page.js')}}"></script>
+{% endblock %}
+

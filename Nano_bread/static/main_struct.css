@@ -1,0 +1,16 @@
+.header-logo-warpper {
+    width: 80px;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.title-text{
+    font-size:18px;
+    color: white;
+}
+
+.userlogin{
+    float:right;
+
+}

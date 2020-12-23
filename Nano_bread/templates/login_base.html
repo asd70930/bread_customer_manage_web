@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}{{title|default}}{% endblock title %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link rel=stylesheet type="text/css" href="{{ url_for('static', filename = 'style.css') }}">
+    <link rel=stylesheet type="text/css" href="{{ url_for('static', filename = 'main_struct.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    {% block scripts %}
+
+<!--    <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    {%- endblock scripts %}
+
+    <nav class="navbar navbar-dark bg-dark box-shadow">
+
+
+        <div class="container d-flex justify-content-between">
+          <a href="/"><img href="/" class="navbar-brand" width="80" height="80" src="{{ url_for('static' ,filename='fish.jpeg') }}"></a>
+            <h1 class="title-text">Management System</h1>
+          <div class="btn-group dropdown userlogin flex-end">
+                    <button type="button" id="bt_email" class="btn btn-sm btn-light dropdown-toggle" aria-expanded="false"></button>
+                    <div class="dropdown-menu dropdown-menu-right" style="display: none;">
+                        <a class="dropdown-item tab-btn" tab-href="#tab-content-1">修改密碼</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/vcms_logout/view">登出</a>
+                    </div>
+                </div>
+        </div>
+    </nav>
+
+</head>
+<body>
+
+
+        {% block page_content %}{% endblock %}
+
+
+
+</body>
+<!--<script src="{{url_for('static', filename='verifyjwt.js')}}"></script>-->
+</html>
