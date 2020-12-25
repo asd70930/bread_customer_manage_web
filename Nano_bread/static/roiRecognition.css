@@ -1,0 +1,17 @@
+.img-zone{
+  height: 800px; /*can be anything*/
+  width: 800px;
+  position: relative;
+
+}
+.imgshow{
+  width:400px;
+  height:400px;
+  position: absolute;
+}
+
+.tableBorder{
+  border-radius: 0.5rem;
+  border: 1px solid ;
+
+}

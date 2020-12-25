@@ -1,0 +1,48 @@
+<div id="table-5" class="col-lg-10 h-title" style="">
+    <div class="mb-3">
+        <button id="bt_backToCustomerProductList" class="btn btn-danger btn-lg" onClick="backToCustomerProductList()">返回</button>
+    </div>
+    <div class="">
+        <form class="row padding-15 layout-style-1">
+            <div class="layout-4-5">
+                <div class="upload-image-wrapper">
+                    <img src="" id="blsh1" class="upload-image">
+                    <span class="input-label">商品主圖</span>
+                </div>
+                <div class="ta-c padding-15">
+                    <label class="btn btn-primary bt_font">
+                        選擇圖片<input class="" hidden id="uploadimg1" type="file" accept="image/*" onchange="readURL(this)">
+                    </label>
+                    <ul class="input-remark-wrapper margin-0">
+                        <li>1. 最小圖片尺寸 200x200 pixels</li>
+                        <li>2. 圖片支援格式 jpg, jpeg, png, svg</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="layout-5-5 row">
+                <div style="display:none;">
+                    <input type="text" id="pre_barcode_error" value="" >
+                </div>
+
+                <div class="form-input-group layout-10">
+                    <input type="text" class="wd-100" name="barcode" id="barcode_error" value="" >
+                    <label class="input-label">商品編號/條碼(必填)</label>
+                </div>
+
+                <div class="form-input-group layout-10">
+                    <input type="text" class="wd-100" name="product_name" id="product_name_error" value="">
+                    <label class="input-label">商品名稱（必填）</label>
+                </div>
+
+                <div class="form-input-group layout-10">
+                    <input type="text" class="wd-100" name="remarks" id="remarks_error" value="">
+                    <label class="input-label">備註資訊</label>
+                </div>
+
+            </div>
+            <div class="ta-r wd-100">
+                <button type="button" class="btn btn-lg btn-primary" onClick="saveEditCustomerProfile()">save</button>
+            </div>
+        </form>
+    </div>
+</div>

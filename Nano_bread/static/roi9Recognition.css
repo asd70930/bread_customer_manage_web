@@ -1,0 +1,63 @@
+.out-layer-border{
+border-radius: 0.5rem;
+border: 1px solid ;
+}
+.imgshow{
+  width:400px;
+  height:400px;
+  position: absolute;
+}
+.img-zone{
+  height: 400px; /*can be anything*/
+  width: 400px;
+  position: relative;
+
+}
+.h-flex{
+overflow:hidden;
+}
+
+.li-layout{
+    display: flex;
+    padding: 5px 5px 5px 0px;
+    margin:5px 0px 5px 0px;
+    flex-direction: row;
+}
+.layout-2{
+    flex: 0 0 20%;
+}
+.layout-8{
+    flex: 0 0 80%;
+}
+.ta-r {
+    text-align: right;
+}
+.num{
+    font-size: 24px;
+    font-weight: bold;
+}
+.fl-col{
+    display: flex;
+    flex-direction: column;
+}
+
+.tableBorder{
+    border-radius: 0.5rem;
+    border: 1px solid ;
+
+}
+.f-mid{
+    font-size: 16px;
+}
+.p-a-right{
+    position:absolute;
+    left:750px;
+    top:0px;
+}
+.p-r{
+    position:relative;
+}
+
+.cursor-p{
+    cursor: pointer;
+}

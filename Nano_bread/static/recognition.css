@@ -1,0 +1,82 @@
+.img-zone-large{
+    height: 700px; /*can be anything*/
+    position: relative;
+    background-color: rgba(116, 116, 116, 0.1);
+}
+.img-zone{
+    height: 400px; /*can be anything*/
+    width: 400px;
+    position: relative;
+    background-color: rgba(116, 116, 116, 0.1);
+}
+.img-map {
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+.outer-box-shadow{
+    border-radius: 30px;
+    -webkit-box-shadow: 0 3px 8px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.08);
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.08);
+}
+.outer-frame-overflow-y {
+    height: 100%;
+    flex: 3 1 0%;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+    border-radius: 0.25rem;
+    background-color: rgba(255, 255, 255, .6);
+}
+.layout-2{
+    flex: 0 0 20%;
+}
+.layout-8{
+    flex: 0 0 80%;
+}
+.li-layout{
+    display: flex;
+    padding: 5px 5px 5px 0px;
+    margin:5px 0px 5px 0px;
+    flex-direction: row;
+}
+.ta-r {
+    text-align: right;
+}
+.fl-col{
+    display: flex;
+    flex-direction: column;
+}
+.num{
+    font-size: 24px;
+    font-weight: bold;
+}
+.rect{
+    position: absolute;
+}
+
+.selected {
+    border: 3px solid red;
+    animation-name: oxxo;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+.unselected {
+    border: 3px solid green;
+}
+.div-unselected{
+    border-radius: 0.5rem;
+    border: 1px solid ;
+}
+
+@keyframes oxxo{
+    0%   { border-color: rgba(255, 0, 0, 1); }
+    50% { border-color: rgba(0, 255, 0, 1); }
+    100% { border-color: rgba(255, 0, 0, 1); }
+}

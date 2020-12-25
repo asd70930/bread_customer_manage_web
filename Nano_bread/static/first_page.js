@@ -17,6 +17,7 @@ $("#customerUploadImg").change(function(){
 
 function imageAjax(srcs){
     var value = 'Bearer '+localStorage.getItem("myJWT");
+    let flag = 0;
     [].forEach.call(srcs,src =>{
         $.ajax({
             url:"/save_product_image",
@@ -24,13 +25,14 @@ function imageAjax(srcs){
             method: "post",
             contentType: "application/json;charset=UTF-8",
             dataType:"json",
-            data:JSON.stringify({"base64":src,"product_id":productIdSend()}),
+            data:JSON.stringify({"base64":src,"product_id":productIdSend(),"flag":flag}),
             beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', value);
             },
         }).done(function(data){
             console.log("good job");
         });
+        flag +=1;
     });
 
 
@@ -274,6 +276,20 @@ function passProductId(obj){
     $("#bt_saveImage").attr("data-productID", productId);
 }
 
+function addCustomerProduct(){
+    $.ajax({
+        url:"/customer_add_product",
+        method: "get",
+        contentType: "application/json;charset=UTF-8",
+        dataType:"html",
+        success: function (data) {
+            showTable(5);
+            $("#table-5").html(data);
+        },
+    });
+}
+
+
 function showCustomerProductsImage(obj){
 //    var id = obj.id.split("_")[1];
     var value = 'Bearer '+localStorage.getItem("myJWT");
@@ -313,3 +329,25 @@ function getNum(text){
 	var value = text.replace(/[^0-9a-zA-Z]/ig,"");
 	return value;
 }
+
+function setCameraPage(){
+    $.ajax({
+        url:"/camera_set",
+        method: "get",
+        contentType: "application/json;charset=UTF-8",
+        dataType:"json",
+        success: function (data) {
+            showTable(7);
+
+            if (data["status"]==1){
+                $("#table").html(data["html"]);
+                initCamera(data["camData"]);
+            }
+        },
+        error: function (xhr,status,error) {
+                alert('try it later')
+        },
+    });
+
+}
+
