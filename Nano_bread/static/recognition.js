@@ -152,18 +152,27 @@ function infrernce() {
         },
         success: function (data) {
             var status = data["rtn"]
-            if (status == 400){
+            if (status != 200){
                 alert("server error, try it later");
             }
             else{
-                var datalist = data["rtn_values"]
+                var datalist = data["items"]
                 var datadic = {}
                 for (data of datalist){
-                    dataKey = data[1];
-                    dataLeft = data[0][0]
-                    dataTop = data[0][1]
-                    dataWidth = data[0][2]
-                    dataHeight = data[0][3]
+                    // data as {
+                    //"num": 1,
+                    //"position": [0,0,10,20],
+                    //"confidence": 0.8,
+                    //"real_id": 1,
+                    //"name": "Taro",}
+
+                    // dataKey = model output id
+                    dataName = data["item"]["name"];
+                    dataKey = data["item"]["real_id"];
+                    dataLeft = data["item"]["position"][0]
+                    dataTop = data["item"]["position"][1]
+                    dataWidth = data["item"]["position"][2]
+                    dataHeight = data["item"]["position"][3]
 
                     var htmlBox = '<div class="rect rect-'+dataKey+' unselected" onclick="addSelectedList(this)" data-key="'+dataKey +'" style="left:'
                     htmlBox += (dataLeft * weightsWidth  + widthAnchor) +  'px;top:'+ (dataTop * weightsHeight + heightAnchor) + 'px;width:'
@@ -173,7 +182,7 @@ function infrernce() {
                     if (dataKey in datadic){
                         datadic[dataKey][0]+=1;
                     }
-                    else{datadic[dataKey] = [1, data[2]];}
+                    else{datadic[dataKey] = [1, dataName];}
                 }
                 var flag = 0;
                 for (key in datadic){

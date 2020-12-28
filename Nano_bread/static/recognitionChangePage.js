@@ -9,3 +9,6 @@ function pageChangeRoi9Recognition(){
     window.location.href='/recognitionPage/roi9Recognition';
 }
 
+function pageChangeFirst(){
+    window.location.href='/';
+}
