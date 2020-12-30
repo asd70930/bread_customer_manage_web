@@ -6,9 +6,88 @@ from os import listdir
 from os.path import isfile
 import front_config
 
-
-
 CUSTOMER_FILE = front_config.CUSTOMER_FILE
+
+def html_camera_roi_inference_table_maker(data, percentage):
+    """
+    camera roi inference 回傳結果
+    將每個攝影機表單依據回傳內容打印產品ID NAME 以及數量
+
+    :param data:
+    :return:
+    """
+    keys = data.keys()
+
+    body = BeautifulSoup()
+    for key in keys:
+        url = "templates/cameraROIInferenceTable.html"
+        soup_table = BeautifulSoup(open(url), 'html.parser')
+        dom_body = soup_table.find("p", class_="product_id")
+        dom_body.string = key
+        dom_body = soup_table.find("p", class_="product_name")
+        dom_body.string = data[key]["name"]
+        dom_body = soup_table.find("div", class_="count")
+        dom_body.string = "X"+str(data[key]["count"])
+        body.append(soup_table)
+    url = "templates/cameraROIPercentageTable.html"
+    percentage_table = BeautifulSoup(open(url), 'html.parser')
+    dom_body = percentage_table.find("p")
+    dom_body.string = "佔比："+str(percentage)
+    body.append(percentage_table)
+    html = body.prettify()
+    return html
+
+def html_camera_roi_table_maker(data):
+    """
+    由camera.data所紀錄的camera資訊
+    將其自動打印多個攝影欄位並付再cameraROI.html中
+    :param data: camera.data開啟後以dic帶入
+    :return:
+    """
+    keys = data.keys()
+    img_path = 'static/A.png'
+    img = cv2.imread(img_path)
+    img_src = cv2_strbase64(img)
+
+    coordinates = []
+    body = BeautifulSoup()
+    for key in keys:
+        if not data[key]["hasFrame"]:
+            continue
+        if data[key]["painted"]:
+            coordinates.append({"x1": data[key]["x1"], "x2": data[key]["x2"],
+                                "x3": data[key]["x3"], "x4": data[key]["x4"],
+                                "y1": data[key]["y1"], "y2": data[key]["y2"],
+                                "y3": data[key]["y3"], "y4": data[key]["y4"],
+                                "ip": data[key]["ip"], "key": key, "painted": data[key]["painted"],
+                                "hasFrame": data[key]["hasFrame"],
+                                "AnchorHeight": data[key]["AnchorHeight"], "AnchorWidth": data[key]["AnchorWidth"]})
+
+        else:
+            coordinates.append({"ip": data[key]["ip"], "key": key, "painted": data[key]["painted"],
+                                "hasFrame": data[key]["hasFrame"],
+                                "AnchorHeight": data[key]["AnchorHeight"], "AnchorWidth": data[key]["AnchorWidth"]})
+        url = "templates/cameraROITable.html"
+        soup_table = BeautifulSoup(open(url), 'html.parser')
+        dom_body = soup_table.find("input")
+        dom_body["value"] = data[key]["ip"]
+        dom_body["data-camkey"] = key
+
+        dom_body = soup_table.find("canvas")
+        dom_body["data-camkey"] = key
+
+        dom_body = soup_table.find("img")
+        dom_body["src"] = img_src
+        dom_body["data-camkey"] = key
+
+        dom_body = soup_table.find("div", class_="roi_table")
+        dom_body["data-camkey"] = key
+
+        body.append(soup_table)
+
+    html = body.prettify()
+    return {"html": html, "data": coordinates}
+
 
 def html_add_customer_product_maker():
     """

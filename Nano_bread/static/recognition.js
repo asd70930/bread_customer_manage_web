@@ -119,24 +119,23 @@ $("#show_camera1").click(function () {
             $('#show_camera1').attr('disabled', false);
             if (ret){
                 $('#blsh1').attr('src', base);
-
             }
             else{alert("無法取得攝影機影像！");}
         }
     });
 
-    var imgObject = $("#blsh1")[0]
+    var imgObject = $("#blsh1")[0];
     var width = imgObject.clientWidth;
     var height = imgObject.clientHeight;
 });
 
 function infrernce() {
+    clean();
     changeWeight()
-    var aimgsrc = $("#blsh1").attr("src")
+    var aimgsrc = $("#blsh1").attr("src");
     var pay_load = {
         "b64string": aimgsrc
     };
-    var value = 'Bearer '+localStorage.getItem("myJWT");
     $("#bt2").attr("disabled","")
     $.ajax({
         url:"infrence",
@@ -144,9 +143,6 @@ function infrernce() {
         contentType: "application/json;charset=UTF-8",
         dataType:"json",
         data:JSON.stringify(pay_load),
-        beforeSend: function (xhr) {
-        xhr.setRequestHeader('Authorization', value);
-        },
         complete:function(){
             $("#bt2").removeAttr("disabled");
         },
@@ -156,7 +152,7 @@ function infrernce() {
                 alert("server error, try it later");
             }
             else{
-                var datalist = data["items"]
+                var datalist = data["items"][0]["item"]
                 var datadic = {}
                 for (data of datalist){
                     // data as {
@@ -165,14 +161,13 @@ function infrernce() {
                     //"confidence": 0.8,
                     //"real_id": 1,
                     //"name": "Taro",}
-
                     // dataKey = model output id
-                    dataName = data["item"]["name"];
-                    dataKey = data["item"]["real_id"];
-                    dataLeft = data["item"]["position"][0]
-                    dataTop = data["item"]["position"][1]
-                    dataWidth = data["item"]["position"][2]
-                    dataHeight = data["item"]["position"][3]
+                    dataName = data["name"];
+                    dataKey = data["real_id"];
+                    dataLeft = data["position"][0]
+                    dataTop = data["position"][1]
+                    dataWidth = data["position"][2]
+                    dataHeight = data["position"][3]
 
                     var htmlBox = '<div class="rect rect-'+dataKey+' unselected" onclick="addSelectedList(this)" data-key="'+dataKey +'" style="left:'
                     htmlBox += (dataLeft * weightsWidth  + widthAnchor) +  'px;top:'+ (dataTop * weightsHeight + heightAnchor) + 'px;width:'

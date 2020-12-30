@@ -1,0 +1,48 @@
+.outer-frame-overflow-y {
+    height: 100%;
+    flex: 3 1 0%;
+
+    margin-bottom: 10px;
+    border-radius: 0.25rem;
+    background-color: rgba(255, 255, 255, .6);
+}
+
+.li-layout {
+    display: flex;
+    padding: 5px 5px 5px 0px;
+    margin: 5px 0px 5px 0px;
+    flex-direction: row;
+}
+.fl-col {
+    display: flex;
+    flex-direction: column;
+}
+.layout-5 {
+    flex: 0 0 50%;
+}
+.layout-4 {
+    flex: 0 0 40%;
+}
+.layout-6 {
+    flex: 0 0 60%;
+}
+.fl-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.imgshow{
+  width:400px;
+  height:400px;
+  position: absolute;
+}
+.img-zone{
+  height: 400px; /*can be anything*/
+  width: 400px;
+  position: relative;
+
+}
+.text-large {
+    font-size: 16px;
+    font-weight: bold;
+}

@@ -1,3 +1,4 @@
+
 var classDict = {}; // key is string as "1", "2"
 
 
@@ -98,6 +99,7 @@ function saveCamera(){
         ip = $("input[data-camkey='"+key+"']").val();
         sendData["ip"] = ip;
         painted = classDict[key].get_isPainted();
+        hasFrame = classDict[key].get_hasFrame();
         if (painted){
             corList = classDict[key].get_xyList();
             sendData["painted"] = true;
@@ -110,6 +112,22 @@ function saveCamera(){
             sendData["y3"] = corList[2][1];
             sendData["y4"] = corList[3][1];
         }
+        else{
+            sendData["painted"] = false;
+        }
+
+        if(hasFrame){
+            AnchorHeight = classDict[key].get_AnchorHeight();
+            AnchorWidth  = classDict[key].get_AnchorWidth();
+            sendData["hasFrame"] = hasFrame;
+            sendData["AnchorHeight"] = AnchorHeight;
+            sendData["AnchorWidth"] = AnchorWidth;
+        }
+        else{
+            sendData["hasFrame"] = hasFrame;
+        }
+
+
         payload[key] = sendData;
     }
 
@@ -133,12 +151,6 @@ function saveCamera(){
         },
     });
 
-
-
-
-
-
-
 }
 
 function getCameraFrame(obj){
@@ -152,7 +164,26 @@ function getCameraFrame(obj){
         dataType:"json",
         data:JSON.stringify(payload),
         success: function (data) {
-            $("img[data-camkey='"+id+"']").attr("src",data["base"]);
+            if(data["ret"]){
+                $("img[data-camkey='"+id+"']").attr("src",data["base"]);
+                classDict[id].set_hasFrame(true);
+
+                var image = new Image();
+                image.src = data["base"];
+                image.onload = function() {
+                    oriHeight = image.height;
+                    oriWidth  = image.width;
+                    var imageZoneHeight = $("img[data-camkey='"+id+"']")[0].clientHeight;
+                    var imageZoneWidth  = $("img[data-camkey='"+id+"']")[0].clientWidth;
+                    var AnchorWidth  = oriWidth/imageZoneWidth;
+                    var AnchorHeight = oriHeight/imageZoneHeight;
+                    classDict[id].set_AnchorHeight(AnchorHeight);
+                    classDict[id].set_AnchorWidth(AnchorWidth);
+                };
+            }
+            else{
+                alert('try it later');
+            }
         },
         error: function (xhr,status,error) {
                 alert('try it later');
@@ -188,7 +219,6 @@ function createNewCamera(){
     });
 }
 
-
 function initCamera(data){
     classDict={};
     var dataLen = data.length;
@@ -201,15 +231,11 @@ function initCamera(data){
         if (painted){
             canvas.initSetXYList(data[i][1]);
             canvas.set_isPainted(painted);
-
-
             canva = $("canvas[data-camkey='"+number+"']")[0] ; // get canvas DOM , only use in once time
             ctx = canva.getContext('2d');
             ctx.strokeStyle = "rgb(255,0,0)"; // Red line
             clean(ctx,canvas);
             drawLine(ctx,canvas);
-
-
         }
         classDict[number] = canvas;
     }
@@ -227,6 +253,7 @@ class myCanvas{
         this.clickFlag = 0;
         this.mouseX = 0;
         this.mouseY = 0;
+        this.hasFrame = false;
     }
 
     initSetXYList(data){
@@ -324,6 +351,14 @@ class myCanvas{
 
     set_number(n){
         this.number = n;
+    }
+
+    get_hasFrame(){
+        return this.hasFrame;
+    }
+
+    set_hasFrame(bool){
+        this.hasFrame = bool;
     }
 
 }

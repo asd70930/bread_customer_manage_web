@@ -1,0 +1,38 @@
+{% extends "rocognitonBase.html" %}
+{% block title %}{% endblock %}
+{% block page_content %}
+<link rel=stylesheet type="text/css" href="{{ url_for('static', filename = 'cameraROI.css') }}">
+
+<body>
+<div class="mx-5 my-4">
+    <div class="row  d-flex justify-content-center">
+        <div class="">
+            <button class="btn btn-primary" onclick="roiInference()">roi all camera</button>
+            <button class="btn btn-primary" onclick="test()">TEST</button>
+        </div>
+    </div>
+    <hr>
+
+    <div id="table">
+
+
+    </div>
+    <div >
+        <div class="row ml-1 my-2">
+            <div class="col-4 d-flex flex-column" id="total-table">
+                <p class="text-large">Total</p>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+</body>
+
+
+<script src="{{url_for('static', filename='cameraROI.js')}}"></script>
+{% endblock %}
+
