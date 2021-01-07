@@ -22,6 +22,8 @@ def html_camera_roi_inference_table_maker(data, percentage):
     for key in keys:
         url = "templates/cameraROIInferenceTable.html"
         soup_table = BeautifulSoup(open(url), 'html.parser')
+        dom_body = soup_table.find("div", class_="ans")
+        dom_body["data-camkey"] = key
         dom_body = soup_table.find("p", class_="product_id")
         dom_body.string = key
         dom_body = soup_table.find("p", class_="product_name")
@@ -32,7 +34,8 @@ def html_camera_roi_inference_table_maker(data, percentage):
     url = "templates/cameraROIPercentageTable.html"
     percentage_table = BeautifulSoup(open(url), 'html.parser')
     dom_body = percentage_table.find("p")
-    dom_body.string = "佔比："+str(percentage)
+
+    dom_body.string = "佔比："+str(format(percentage*100, '.0f'))+' %'
     body.append(percentage_table)
     html = body.prettify()
     return html

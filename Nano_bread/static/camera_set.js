@@ -77,7 +77,7 @@ function drawLine(ctx,canvas){
 }
 
 function clean(ctx,canvas){
-    canvas.cleanClickFlag()
+    canvas.cleanClickFlag();
     dataList = canvas.get_xyList();
     for (data of dataList){
         x = data[0];

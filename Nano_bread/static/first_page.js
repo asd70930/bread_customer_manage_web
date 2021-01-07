@@ -16,7 +16,6 @@ $("#customerUploadImg").change(function(){
 
 
 function imageAjax(srcs){
-    var value = 'Bearer '+localStorage.getItem("myJWT");
     let flag = 0;
     [].forEach.call(srcs,src =>{
         $.ajax({
@@ -26,9 +25,6 @@ function imageAjax(srcs){
             contentType: "application/json;charset=UTF-8",
             dataType:"json",
             data:JSON.stringify({"base64":src,"product_id":productIdSend(),"flag":flag}),
-            beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', value);
-            },
         }).done(function(data){
             console.log("good job");
         });
@@ -39,6 +35,21 @@ function imageAjax(srcs){
 }
 
 
+function imageAllAjax(srcs){
+    $.ajax({
+            url:"/save_product_image",
+            async:false,
+            method: "post",
+            contentType: "application/json;charset=UTF-8",
+            dataType:"json",
+            data:JSON.stringify({"base64":srcs,"product_id":productIdSend()})
+        }).done(function(data){
+            console.log("good job");
+        });
+}
+
+
+
 async function productImageSave(obj){
     var srcArray = [];
     let imgArray = $("#uploadLayout > li > div > div > img");
@@ -46,8 +57,8 @@ async function productImageSave(obj){
         srcArray.push(imgObj.getAttribute('src'))
     });
     if (srcArray.length ===0){alert("沒有上傳照片！");return ""}
-    await imageAjax(srcArray);
-
+//    await imageAjax(srcArray);
+    imageAllAjax(srcArray);
     // close modal and return to product_id images page
 
     alert("上傳成功！");

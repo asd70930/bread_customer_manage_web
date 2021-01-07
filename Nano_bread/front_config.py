@@ -1,6 +1,6 @@
 from os import getcwd
 
-TESTING_NOT_CONNET_JETSON_NANO = False
+TESTING_NOT_CONNET_JETSON_NANO = True
 ORIGIN_PATH = getcwd()
 PREBASE64 = "data:image/jpeg;base64,"
 USERFILE  = 'root'

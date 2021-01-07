@@ -24,6 +24,11 @@ function clean(){
     $(".ans").remove();
 }
 
+function cleanCanvas(id){
+    canva = $("canvas[data-camkey='"+id+"']")[0];
+    canva.width = canva.width;
+}
+
 function drawCanvas(roiList, color, id,AnchorWidth,AnchorHeight){
     var canva = $("canvas[data-camkey='"+id+"']")[0] ; // get canvas DOM , only use in once time
     var ctx = canva.getContext('2d');
@@ -31,6 +36,7 @@ function drawCanvas(roiList, color, id,AnchorWidth,AnchorHeight){
     ctx.strokeStyle = color; // Red line
     drawLine(ctx, roiList,AnchorWidth,AnchorHeight);
 }
+
 function drawLine(ctx, roiList,AnchorWidth,AnchorHeight){
     thisflag = 0;
     dataList = roiList;
@@ -39,6 +45,11 @@ function drawLine(ctx, roiList,AnchorWidth,AnchorHeight){
     for (data of dataList){
         var x = data[0]/AnchorWidth;
         var y = data[1]/AnchorHeight;
+        if (x<0){x=1;}
+        if (x>400){x=399;}
+        if (y<0){y=1;}
+        if (y>400){y=399;}
+
         if (thisflag ==0){
             thisflag+=1;
             ctx.moveTo(x,y);
@@ -53,6 +64,11 @@ function drawLine(ctx, roiList,AnchorWidth,AnchorHeight){
 }
 
 
+function get_rand_color(){
+    var color = Math.floor(Math.random() * 16777216).toString(16);
+    return '#000000'.slice(0, -color.length) + color;
+}
+
 function roiInference(){
     clean();
     var send_data = [];
@@ -66,13 +82,11 @@ function roiInference(){
                         }
         if (isPainted){
             var coordinate = classDict[key].get_xyList();
-
             dic_data["coordinate"] = coordinate;
         }
         send_data.push(dic_data)
     }
 
-    var xxxx = 1111;
     $.ajax({
     url:"/recognitionPage/pageChangeCameraROI/roiInference",
     method: "post",
@@ -95,26 +109,26 @@ function roiInference(){
         //將畫面打印再對應的IMG, 把ROI一併畫上
         for (itemDic of data["items"]){
             var roi = itemDic["roi"];
+            // id is camera id
             var id  = itemDic["id"];
             var imgBase64 = itemDic["b64string"];
             var AnchorHeight = itemDic["AnchorHeight"];
             var AnchorWidth = itemDic["AnchorWidth"];
-
+            cleanCanvas(id);
             $("img[data-camkey='"+id+"']").attr("src",imgBase64);
             drawCanvas(roi,"rgb(255,0,0)", id,AnchorWidth,AnchorHeight);
 
             for (itemsDic of itemDic["item"])
                 var itemRoi = itemsDic["position"];
-                drawCanvas(itemRoi,"rgb(0,255,0)", id,AnchorWidth,AnchorHeight);
+                var color = get_rand_color();
+                // realId is object detection model id transfer to customer product id
+                var realId = itemsDic["real_id"];
+                console.log("realId"+realId);
+                drawCanvas(itemRoi, color, id,AnchorWidth,AnchorHeight);
+//                $("div[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
+                $(".ans[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
+
         }
-
-
-
-
-
-
-
-
 
         var xx = 123;
     },
@@ -141,6 +155,8 @@ function initCamera(data){
 
 function test(){
     var x = 1;
+    var color = get_rand_color();
+    console.log("color "+color);
 }
 
 
