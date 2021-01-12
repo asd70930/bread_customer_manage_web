@@ -221,6 +221,11 @@ function readURL(input) {
     }
 }
 
+function deleteProduct(){
+    var x = $("#table1").find('input');
+    var xx = 1;
+}
+
 function showTable(tableId){
     var a = $("[id^='table-']")
     for (i=0;i<a.length;i++){
@@ -234,15 +239,11 @@ function showTable(tableId){
 }
 
 function showCustomerProductList(){
-    var value = 'Bearer '+localStorage.getItem("myJWT")
     $.ajax({
         url:"customer_productData",
         method: "get",
         contentType: "application/json;charset=UTF-8",
         dataType:"html",
-        beforeSend: function (xhr) {
-        xhr.setRequestHeader('Authorization', value);
-        },
         success: function (data) {
             $("#table1").html(data)
         },

@@ -6,8 +6,8 @@ import string
 import time
 import numpy as np
 import front_config
-from os import remove, makedirs, getcwd, chdir, rename, listdir
-from os.path import getctime, isdir
+from os import remove, makedirs, getcwd, chdir, rename, listdir, makedirs
+from os.path import getctime, isdir,exists
 
 
 CUSTOMER_FILE = front_config.CUSTOMER_FILE
@@ -15,6 +15,12 @@ ORIGIN_PATH = front_config.ORIGIN_PATH
 PREBASE64 = front_config.PREBASE64
 LOCKFILEEXITEDTIME = front_config.LOCKFILEEXITEDTIME
 SLEEPLITTLETIME = front_config.SLEEPLITTLETIME
+
+def check_root_file():
+    path = "customer/root"
+    folder = exists(path)
+    if not folder:
+        makedirs(path)
 
 def random_product_id(customer):
     dir_list = []
@@ -69,9 +75,11 @@ def save_customer_product_profile(data, path):
         rewrite_title_image(dir_path, imagebase)
 
         if pre_product_id != product_id:
+            # 如果使用者需要修改產品ID
             chdir(path)
             rename(pre_product_id, product_id)
             chdir(ORIGIN_PATH)
+            #
 
 
 

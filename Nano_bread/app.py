@@ -12,7 +12,7 @@ import requests
 import copy
 from common_fun import rewrite_title_image, init_image_json_data , get_json_data, init_json_file, overwrite_json_data,\
 rewrite_json_data, rewrite_json_image_count, imgSrc2_cv2img, base64toimg, cv2_strbase64 , get_ipc, generate_random_str,\
-create_lock_file, delete_lock_file, lockfile_sleep, save_customer_product_profile, random_product_id
+create_lock_file, delete_lock_file, lockfile_sleep, save_customer_product_profile, random_product_id, check_root_file
 
 from html_maker import html_add_customer_product_maker, html_editcustomer_productMaker,\
 html_customer_product_image_viewMaker, html_customer_productMaker, html_camera_maker, html_camera_create_maker,\
@@ -29,7 +29,7 @@ JETSONNANO_API_NINE = "/bread/query/nine/v2"
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
-
+check_root_file()
 
 
 @app.route('/bread/query/category/v1', methods=['POST'])
@@ -339,12 +339,12 @@ def roiInference():
                     items_datas[max_id] = {"count": 1, "name": max_name}
 
             # item_datas is one image all product id and name and count
-            html = html_camera_roi_inference_table_maker(item_datas, percentage_response)
+            html = html_camera_roi_inference_table_maker(item_datas, percentage_response, False)
 
             htmls.append({"key": keep_data[i][0], "html": html})
 
         total_percentage = total_percentage/image_count
-        html = html_camera_roi_inference_table_maker(items_datas, total_percentage)
+        html = html_camera_roi_inference_table_maker(items_datas, total_percentage, True)
         htmls.append({"key": "total", "html": html})
         response_data["html"] = htmls
 
@@ -360,7 +360,6 @@ def roiInference():
 def Recognition_bread():
     """
     發送Post Request至Jetson nano上,API格式查詢gitlab 機器設備issues
-    發送的url:http://192.168.101.201:5000/bread/query/position/v1
     data : JSON "b64string": 圖片的base64
     :return:
     """
@@ -450,9 +449,7 @@ def Recognition_bread():
 def camera_roi_table():
     camera_data_path = "customer/root/camera.data"
     camera_data = get_json_data(camera_data_path)
-
     response_data = html_camera_roi_table_maker(camera_data)
-
     return response_data
 
 
@@ -469,7 +466,6 @@ def customer_editProductData():
     username = USERFILE
     data = request.get_json()
     product_id = data["product_id"]
-    # print("os path :", getcwd())
     html = html_editcustomer_productMaker(username, product_id)
     return html
 

@@ -118,18 +118,21 @@ function roiInference(){
             $("img[data-camkey='"+id+"']").attr("src",imgBase64);
             drawCanvas(roi,"rgb(255,0,0)", id,AnchorWidth,AnchorHeight);
 
-            for (itemsDic of itemDic["item"])
-                var itemRoi = itemsDic["position"];
-                var color = get_rand_color();
-                // realId is object detection model id transfer to customer product id
-                var realId = itemsDic["real_id"];
-                console.log("realId"+realId);
-                drawCanvas(itemRoi, color, id,AnchorWidth,AnchorHeight);
-//                $("div[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
-                $(".ans[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
+
+            if(itemDic["item"].length>0){
+                for (itemsDic of itemDic["item"])
+                    var itemRoi = itemsDic["position"];
+                    var color = get_rand_color();
+                    // realId is object detection model id transfer to customer product id
+                    var realId = itemsDic["real_id"];
+                    drawCanvas(itemRoi, color, id,AnchorWidth,AnchorHeight);
+    //                $("div[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
+                    $(".ans[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
+            }
 
         }
 
+        $("div[data-camkey='total']").attr("style","border-style:solid;border-color:black;");
         var xx = 123;
     },
     error: function (xhr,status,error) {
@@ -156,7 +159,6 @@ function initCamera(data){
 function test(){
     var x = 1;
     var color = get_rand_color();
-    console.log("color "+color);
 }
 
 

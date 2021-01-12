@@ -8,12 +8,13 @@ import front_config
 
 CUSTOMER_FILE = front_config.CUSTOMER_FILE
 
-def html_camera_roi_inference_table_maker(data, percentage):
+def html_camera_roi_inference_table_maker(data, percentage, total):
     """
     camera roi inference 回傳結果
     將每個攝影機表單依據回傳內容打印產品ID NAME 以及數量
-
     :param data:
+    :param percentage:
+    :param total: type bool , is total table or not
     :return:
     """
     keys = data.keys()
@@ -22,8 +23,13 @@ def html_camera_roi_inference_table_maker(data, percentage):
     for key in keys:
         url = "templates/cameraROIInferenceTable.html"
         soup_table = BeautifulSoup(open(url), 'html.parser')
-        dom_body = soup_table.find("div", class_="ans")
-        dom_body["data-camkey"] = key
+        if total:
+            dom_body = soup_table.find("div", class_="ans")
+            dom_body["data-camkey"] = "total"
+        else:
+            dom_body = soup_table.find("div", class_="ans")
+            dom_body["data-camkey"] = key
+
         dom_body = soup_table.find("p", class_="product_id")
         dom_body.string = key
         dom_body = soup_table.find("p", class_="product_name")
@@ -205,6 +211,8 @@ def html_customer_productMaker(customername, this_list):
         url = "templates/tr_tlp.html"
         soup_body = BeautifulSoup(open(url), 'html.parser')
         with open(data_url) as json_file:
+            # 依照開會內容將商品清單的順序改為
+            # 品名> 料號 > 商品圖片
             flag = i + 1
             img_url = "customer/"+customername+"/"+name+"/title.jpg"
             img = cv2.imread(img_url)
@@ -212,12 +220,17 @@ def html_customer_productMaker(customername, this_list):
             data = json.load(json_file)
             bodys = soup_body.find_all('th')
             newtag = soup.new_tag(name="input", type="checkbox", id="checkbox_" + str(flag))
+            newtag["data-pdkey"] = data["product_id"]
             bodys[0].append(newtag)
-            bodys[1].string = data["product_id"]
-            bodys[1]["id"]  = "pdid_"+str(flag)
+            # 料號
+            bodys[2].string = data["product_id"]
+            bodys[2]["id"]  = "pdid_"+str(flag)
+            # 商品圖片
             newtag = soup.new_tag(name="img", src=img_base64, height="70")
-            bodys[2].append(newtag)
-            bodys[3].string = data["product_name"]
+            bodys[3].append(newtag)
+            # 品名
+            bodys[1].string = data["product_name"]
+
             bodys[4].string = data["memo"]
             bodys[5].string = data["image_count"]
             if data["ON"] == "1":
