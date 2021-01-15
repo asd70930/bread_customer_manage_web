@@ -180,6 +180,7 @@ def html_customer_product_image_viewMaker(customername, productId):
         table_body["data-path"] = image_path
         table_body = soup_body.find("img")
         table_body["src"] = img_src
+        table_body["onclick"] = "checkedInputBox(this)"
         table_body["data-path"] = image_path
         table_body["data-id"] = id
         table_body = soup_body.find("input")
@@ -233,26 +234,59 @@ def html_customer_productMaker(customername, this_list):
 
             bodys[4].string = data["memo"]
             bodys[5].string = data["image_count"]
-            if data["ON"] == "1":
-                bodys[6].string = "ON"
-            else:
-                bodys[6].string = "OFF"
-            newtag = soup.new_tag(name="button",
-                                  attrs={"class": "btn btn-outline-danger",
-                                         "type": "button",
-                                         "data-productID": data["product_id"],
-                                         "onclick": "showCustomerEditProduct(this)",
-                                         "id": "button_%i_1" % flag})
-            newtag.string = "編輯"
-            bodys[7].append(newtag)
-            newtag = soup.new_tag(name="button",
-                                  attrs={"class": "btn btn-outline-danger",
-                                         "type": "button",
-                                         "data-productID": data["product_id"],
-                                         "onclick": "showCustomerProductsImage(this)",
-                                         "id": "button_%i_2" % flag})
-            newtag.string = "圖資"
-            bodys[7].append(newtag)
+
+            new_button = soup.new_tag(name="button",
+                                      attrs={"class": "btn btn-success customize-btn f-20 mx-3",
+                                             "onclick": "showCustomerEditProduct(this)",
+                                             "data-productID": data["product_id"],
+                                             "type": "button"
+                                             })
+
+            new_svg = soup.new_tag(name="svg",
+                                   attrs={"xmlns": "http://www.w3.org/2000/svg",
+                                          "fill": "currentColor",
+                                          "class": "svg-size bi bi-files",
+                                          "viewBox": "0 0 16 16"
+                                          })
+            new_path = soup.new_tag(name="path",
+                                    attrs={"d": "M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zM11.5 4a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"})
+            new_path2 = soup.new_tag(name="path",
+                                    attrs={"d": "M2.354.646a.5.5 0 0 0-.801.13l-.5 1A.5.5 0 0 0 1 2v13H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H15V2a.5.5 0 0 0-.053-.224l-.5-1a.5.5 0 0 0-.8-.13L13 1.293l-.646-.647a.5.5 0 0 0-.708 0L11 1.293l-.646-.647a.5.5 0 0 0-.708 0L9 1.293 8.354.646a.5.5 0 0 0-.708 0L7 1.293 6.354.646a.5.5 0 0 0-.708 0L5 1.293 4.354.646a.5.5 0 0 0-.708 0L3 1.293 2.354.646zm-.217 1.198l.51.51a.5.5 0 0 0 .707 0L4 1.707l.646.647a.5.5 0 0 0 .708 0L6 1.707l.646.647a.5.5 0 0 0 .708 0L8 1.707l.646.647a.5.5 0 0 0 .708 0L10 1.707l.646.647a.5.5 0 0 0 .708 0L12 1.707l.646.647a.5.5 0 0 0 .708 0l.509-.51.137.274V15H2V2.118l.137-.274z"})
+            new_span = soup.new_tag(name="sapn",
+                                    attrs={"class": "block-bottom"})
+            new_span.string = "編輯"
+            new_svg.append(new_path)
+            new_svg.append(new_path2)
+            new_button.append(new_svg)
+            new_button.append(new_span)
+            bodys[6].append(new_button)
+
+            new_button = soup.new_tag(name="button",
+                                      attrs={"class": "btn btn-success customize-btn f-20 mx-3",
+                                             "onclick": "showCustomerProductsImage(this)",
+                                             "data-productID": data["product_id"],
+                                             "type": "button"
+                                             })
+
+            new_svg = soup.new_tag(name="svg",
+                                   attrs={"xmlns": "http://www.w3.org/2000/svg",
+                                          "fill": "currentColor",
+                                          "class": "svg-size bi bi-files",
+                                          "viewBox": "0 0 16 16"
+                                          })
+            new_path = soup.new_tag(name="path",
+                                    attrs={
+                                        "d": "M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"})
+
+            new_span = soup.new_tag(name="sapn",
+                                    attrs={"class": "block-bottom"})
+            new_span.string = "圖資"
+
+            new_svg.append(new_path)
+            new_button.append(new_svg)
+            new_button.append(new_span)
+
+            bodys[6].append(new_button)
             soup_table.tbody.append(soup_body)
     output = soup_table.prettify()
     return output

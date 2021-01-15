@@ -3,16 +3,18 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 # import yolov4_app_1_4
 import json
-from os import listdir, getcwd, chdir, rename, makedirs
+from os import listdir, getcwd, chdir, rename, makedirs, remove
 from os.path import isdir, isfile
 import cv2
 import threading
 import front_config
 import requests
+from  shutil import rmtree
 import copy
 from common_fun import rewrite_title_image, init_image_json_data , get_json_data, init_json_file, overwrite_json_data,\
 rewrite_json_data, rewrite_json_image_count, imgSrc2_cv2img, base64toimg, cv2_strbase64 , get_ipc, generate_random_str,\
-create_lock_file, delete_lock_file, lockfile_sleep, save_customer_product_profile, random_product_id, check_root_file
+create_lock_file, delete_lock_file, lockfile_sleep, save_customer_product_profile, random_product_id, check_root_file,\
+get_json_image_count
 
 from html_maker import html_add_customer_product_maker, html_editcustomer_productMaker,\
 html_customer_product_image_viewMaker, html_customer_productMaker, html_camera_maker, html_camera_create_maker,\
@@ -486,6 +488,92 @@ def customer_add_product():
     html = html_add_customer_product_maker()
     return html
 
+@app.route('/customer_delete_product_data', methods=['DEL'])
+def customer_delete_product_data():
+    if request.method == "DEL":
+        username = 'root'
+        data = request.get_json()
+        # get product id as list
+        product_ids = data["product_id"]
+
+        # get json data from convert_recognition.data
+        recognition_json_path = CUSTOMER_FILE + username + '/recognition.data'
+        convert_json_path = CUSTOMER_FILE + username + '/convert_recognition.data'
+        data_lock = CUSTOMER_FILE + username + '/convert_datalock'
+
+        if not isfile(convert_json_path) or not isfile(recognition_json_path):
+            return {"message": "not image data", "status": "02"}
+        # if data lock exited , sleep a little time
+        while isfile(data_lock):
+            lockfile_sleep(data_lock)
+
+        # create data lock file
+        create_lock_file(data_lock)
+        convert_recognition_dict = get_json_data(convert_json_path)
+
+        convert_recognition_dict_keys = convert_recognition_dict.keys()
+        delete_covert_keys = []
+        for key in convert_recognition_dict_keys:
+            pro_key = key.split('/')[0]
+            if pro_key in product_ids:
+                delete_covert_keys.append(key)
+        for key in delete_covert_keys:
+            del convert_recognition_dict[key]
+
+        # convert_recognition data done
+        # make recognition
+
+        overwrite_recognition_dict = {}
+        convert_keys = convert_recognition_dict.keys()
+        for convert_key in convert_keys:
+            recognition_keys = convert_recognition_dict[convert_key].keys()
+            for recognition_key in recognition_keys:
+                if recognition_key not in overwrite_recognition_dict:
+                    overwrite_recognition_dict[recognition_key] = \
+                        convert_recognition_dict[convert_key][recognition_key]
+                else:
+                    product_keys = convert_recognition_dict[convert_key][recognition_key].keys()
+                    for product_key in product_keys:
+                        if product_key not in overwrite_recognition_dict[recognition_key]:
+                            overwrite_recognition_dict[recognition_key][product_key] = \
+                                convert_recognition_dict[convert_key][recognition_key][product_key]
+                        else:
+                            overwrite_recognition_dict[recognition_key][product_key] += \
+                                convert_recognition_dict[convert_key][recognition_key][product_key]
+
+        overwrite_json_data(convert_json_path, convert_recognition_dict)
+
+        # delete data lock file
+        delete_lock_file(data_lock)
+
+
+        data_lock = CUSTOMER_FILE + username + '/recognition_datalock'
+
+
+
+        while isfile(data_lock):
+            lockfile_sleep(data_lock)
+
+        # create data lock file
+        create_lock_file(data_lock)
+
+        # overwirte recognition.data
+        overwrite_json_data(recognition_json_path, overwrite_recognition_dict)
+
+        # delete data lock file
+        delete_lock_file(data_lock)
+
+
+        # delete file
+        for product_id in product_ids:
+            file_path = CUSTOMER_FILE + username + '/' + product_id
+            try:
+                rmtree(file_path)
+            except Exception as e:
+                print(e)
+        return {"message": "done", "status": "01"}
+    return {"message":"del only", "status": "02"}
+
 
 @app.route('/reveal_customer_productdataimg', methods=['POST'])
 def reveal_customer_productdataimg():
@@ -572,6 +660,86 @@ def save_product_image():
         return {"message": "done"}
 
     return {"message": "error"}
+
+
+
+@app.route('/delete_product_image', methods=['POST'])
+def delete_product_image():
+    """
+
+    """
+    if request.method == "POST":
+
+        username = 'root'
+        data = request.get_json()
+        image_name = data["file_path"]
+        product_id = str(data["product_id"])
+        path = CUSTOMER_FILE + username + '/'
+        image_path = path + product_id + '/' + image_name
+        data_lock = path + 'datalock'
+
+        #######   delete image file and rewrite json data image count
+        while isfile(data_lock):
+            lockfile_sleep(data_lock)
+        # create data lock file
+        with open(data_lock, 'w') as lock:
+            pass
+        try:
+            remove(image_path)
+        except Exception as e:
+            return {"message": "image delete error"}
+
+        json_file_path = path + product_id + '/' + 'data.data'
+        rewrite_count = str(int(get_json_image_count(json_file_path)) - 1)
+        rewrite_json_image_count(json_file_path, rewrite_count)
+        delete_lock_file(data_lock)
+        ##############################################################
+
+        ####### rewrite recognition.data and convert_recognition.data
+
+        convert_json_path = CUSTOMER_FILE + username + '/convert_recognition.data'
+        data_lock = CUSTOMER_FILE + username + '/convert_datalock'
+        convert_json_key  = product_id+'/'+image_name
+
+        while isfile(data_lock):
+            lockfile_sleep(data_lock)
+
+        # create data lock file
+        create_lock_file(data_lock)
+        convert_recognition_dict = get_json_data(convert_json_path)
+
+        # get data which key is convert_json_key and delete the key
+        data_dict = convert_recognition_dict.pop(convert_json_key)
+        overwrite_json_data(convert_json_path, convert_recognition_dict)
+
+        # delete data lock file
+        delete_lock_file(data_lock)
+
+        #
+        recognition_json_path = CUSTOMER_FILE + username + '/recognition.data'
+        data_lock = CUSTOMER_FILE + username + '/recognition_datalock'
+
+        while isfile(data_lock):
+            lockfile_sleep(data_lock)
+
+        # create data lock file
+        create_lock_file(data_lock)
+        recognition_dict = get_json_data(recognition_json_path)
+
+        model_keys = data_dict.keys()
+        for model_key in model_keys:
+            product_keys = data_dict[model_key].keys()
+            for product_key in product_keys:
+                recognition_dict[model_key][product_key] -= data_dict[model_key][product_key]
+
+        overwrite_json_data(recognition_json_path, recognition_dict)
+        # delete data lock file
+        delete_lock_file(data_lock)
+        print("delete image all process done!")
+
+        return {"message": "done"}
+    return {"message": "post only"}
+
 
 
 # for only one image in ajax

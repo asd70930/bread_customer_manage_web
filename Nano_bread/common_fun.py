@@ -16,6 +16,15 @@ PREBASE64 = front_config.PREBASE64
 LOCKFILEEXITEDTIME = front_config.LOCKFILEEXITEDTIME
 SLEEPLITTLETIME = front_config.SLEEPLITTLETIME
 
+def get_json_image_count(path):
+    """
+    :param path: type: String , json file path
+    :return: String , value of productID has how many image
+    """
+    dic = get_json_data(path)
+    return dic["image_count"]
+
+
 def check_root_file():
     path = "customer/root"
     folder = exists(path)

@@ -1,19 +1,24 @@
 <div id="table-5" class="col-lg-10 h-title" style="">
     <div class="mb-3">
-        <button id="bt_backToCustomerProductList" class="btn btn-danger btn-lg" onClick="backToCustomerProductList()">返回</button>
+        <button class="btn btn-success customize-btn f-20 mx-3" onclick="backToCustomerProductList()" >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="svg-size bi bi-arrow-return-left" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"></path>
+                        </svg>
+                        <span class="block-top" style=""></span>
+                    </button>
     </div>
     <div class="">
         <form class="row padding-15 layout-style-1">
             <div class="layout-4-5">
                 <div class="upload-image-wrapper">
                     <img src="" id="blsh1" class="upload-image">
-                    <span class="input-label">商品主圖</span>
+                    <span class="input-label f-18">商品主圖</span>
                 </div>
                 <div class="ta-c padding-15">
-                    <label class="btn btn-primary bt_font">
+                    <label class="btn btn-primary bt_font f-18">
                         選擇圖片<input class="" hidden id="uploadimg1" type="file" accept="image/*" onchange="readURL(this)">
                     </label>
-                    <ul class="input-remark-wrapper margin-0">
+                    <ul class="input-remark-wrapper margin-0 f-18 p-left-0">
                         <li>1. 最小圖片尺寸 200x200 pixels</li>
                         <li>2. 圖片支援格式 jpg, jpeg, png, svg</li>
                     </ul>
@@ -26,21 +31,21 @@
 
                 <div class="form-input-group layout-10">
                     <input type="text" class="wd-100" name="barcode" id="barcode_error" value="" >
-                    <label class="input-label">料號代碼(必填)</label>
+                    <label class="input-label f-18">料號代碼(必填)</label>
                 </div>
                 <div class="form-input-group layout-10">
                     <input type="text" class="wd-100" name="product_name" id="product_name_error" value="">
-                    <label class="input-label">品名（必填）</label>
+                    <label class="input-label f-18">品名（必填）</label>
                 </div>
 
                 <div class="form-input-group layout-10">
                     <input type="text" class="wd-100" name="remarks" id="remarks_error" value="">
-                    <label class="input-label">備註資訊</label>
+                    <label class="input-label f-18">備註資訊</label>
                 </div>
 
             </div>
             <div class="ta-r wd-100">
-                <button type="button" class="btn btn-lg btn-primary" onClick="saveEditCustomerProfile()">save</button>
+                <button type="button" class="btn btn-lg btn-primary f-18" onClick="saveEditCustomerProfile()">save</button>
             </div>
         </form>
     </div>

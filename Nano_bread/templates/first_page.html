@@ -4,65 +4,66 @@
 
 <link rel=stylesheet type="text/css" href="{{ url_for('static', filename = 'first_page.css') }}">
 <link rel=stylesheet type="text/css" href="{{ url_for('static', filename = 'roi9Recognition.css') }}">
+<style>
+
+</style>
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-1 h-m">
-                <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                    <button type="button" class="btn btn-secondary btn-lg" id="syBt_3">服務清單</button>
-                    <button type="button" class="btn btn-secondary btn-lg" id="syBt_4">訂單管理</button>
-                </div>
-            </div>
-
+        <div class="row f-20">
             <!---->
-            <article id="table-1" class="col-lg-10 h-title" style="">
+            <article id="table-1" class="h-title" style="">
                 <div class="title mb-3">服務清單</div>
                 <div class="">
-                    <button class="btn btn-outline-danger" id="tb1_bt1">商品清單</button>
-                    <button class="btn btn-outline-danger" onclick="setCameraPage()">攝影機調整</button>
-                    <button class="btn btn-outline-danger" onClick="goRecognitionPage()">辨識功能</button>
+                    <button class="btn btn-lg btn-outline-danger f-20" id="tb1_bt1">商品清單</button>
+                    <button class="btn btn-lg btn-outline-danger f-20" onclick="setCameraPage()">攝影機調整</button>
+                    <button class="btn btn-lg btn-outline-danger f-20" onClick="goRecognitionPage()">辨識功能</button>
+
                 </div>
             </article>
 
-            <article id="table-2" class="col-lg-10 h-title" style="display:none;">
+            <article id="table-2" class=" h-title" style="display:none;">
                 <div class="title mb-3">商品清單</div>
-                <div class="mb-3">
-                    <button class="btn btn-outline-danger" onclick="showTable(1)">返回</button>
-                    <button class="btn btn-outline-danger" onclick="addCustomerProduct()">新增商品</button>
-                    <button class="btn btn-outline-danger" onclick="deleteProduct()">刪除商品</button>
-                </div>
-                <div class="h-table" id="table1">
-                    <table class="table">
-                        <thead>
-                            <tr style="color:white;text-align:center;">
-                                <th class="width-4 position-r"></th>
-                                <th class="width-18 ">料號代碼</th>
-                                <th class="width-10 ">商品主圖</th>
-                                <th class="width-25 ">品名</th>
-                                <th class="width-15 ">備註資訊</th>
-                                <th class="width-10 ">圖資數量</th>
-                                <th class="width-5 ">狀態</th>
-                                <th class="width-13 ">管理</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table_body hover-orange">
+                <div class="mb-3 m-left-200">
+                    <button class="btn btn-success customize-btn f-20 mx-3" onclick="showTable(1)" >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="svg-size bi bi-arrow-return-left" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"></path>
+                        </svg>
+                        <span class="block-top" style=""> 返回</span>
+                    </button>
+                    <button class="btn btn-success customize-btn f-20 mx-3" onclick="addCustomerProduct()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="svg-size bi bi-plus-circle" viewBox="0 0 16 16">
+                          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                        <span class="block-top" style=""> 新增商品</span>
+                    </button>
+                    <button class="btn btn-success customize-btn f-20 mx-3" data-tooltip="刪除商品" onclick="deleteProduct()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="svg-size bi bi-trash" viewBox="0 0 16 16">
+                          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                          <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                        </svg>
+                        <span class="block-top" style=""> 刪除商品</span>
+                    </button>
 
-                        </tbody>
-                    </table>
+                </div>
+
+<!--     商品清單商品清單頁面           -->
+                <div class="h-table" id="table1">
+
                 </div>
             </article>
 
 <!--     customer_editProductData             -->
-            <article id="table-5" class="col-lg-10 h-title" style="display:none;">
+            <article id="table-5" class=" h-title" style="display:none;">
 
 
             </article>
 
 <!--     reveal_customer_productdataimg             -->
-            <article id="table-6" class="col-lg-10 h-title" style="display:none;">
+            <article id="table-6" class="col-lg-12 h-title" style="display:none;">
             </article>
 <!--     setting camera             -->
-            <article id="table-7" class="col-lg-10 h-title" style="display:none;">
+            <article id="table-7" class=" h-title" style="display:none;">
                 <div class="title mb-3">攝影機調整</div>
                 <div class="mb-3">
                     <button class="btn btn-outline-danger" onclick="showTable(1)">返回</button>

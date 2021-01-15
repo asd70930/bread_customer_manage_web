@@ -1,17 +1,17 @@
 let uploadImageBase64List = [];
-var filesizeLimit = 6 * 1024 * 1024
+var filesizeLimit = 6 * 1024 * 1024;
 
 $("#syBt_3").click(function(){
-    showTable(1)
+    showTable(1);
 });
 $("#tb1_bt1").click(function(){
     // 呈現客戶所有產品清單頁面
-    showTable(2)
-    showCustomerProductList()
+    showTable(2);
+    showCustomerProductList();
 });
 $("#customerUploadImg").change(function(){
     $("#uploadLayout").empty();
-    readUrlMultiple(this)
+    readUrlMultiple(this);
 });
 
 
@@ -26,7 +26,6 @@ function imageAjax(srcs){
             dataType:"json",
             data:JSON.stringify({"base64":src,"product_id":productIdSend(),"flag":flag}),
         }).done(function(data){
-            console.log("good job");
         });
         flag +=1;
     });
@@ -44,7 +43,6 @@ function imageAllAjax(srcs){
             dataType:"json",
             data:JSON.stringify({"base64":srcs,"product_id":productIdSend()})
         }).done(function(data){
-            console.log("good job");
         });
 }
 
@@ -120,8 +118,6 @@ function readUrlMultiple(input) {
     if (files) {
         [].forEach.call(files, readAndPreview);
     }
-
-
 }
 
 function goRecognitionPage(){
@@ -136,17 +132,14 @@ function backToCustomerProductList(){
 
 async function deleteCustomerProduct(obj){
     var deleteArray = [];
-    var productId = obj.getAttribute("data-productid")
+    var productId = obj.getAttribute("data-productid");
     var inputs = $("input[data-art5='input']");
     [].forEach.call(inputs, input =>{
         if (input.checked == true){
             deleteArray.push(input.getAttribute("data-path"))
         }
     });
-
     function ajax_(dataArray,id){
-
-        var value = 'Bearer '+localStorage.getItem("myJWT");
         [].forEach.call(dataArray,fileName =>{
             var payload = {"file_path":fileName,
                            "product_id":id};
@@ -156,11 +149,7 @@ async function deleteCustomerProduct(obj){
             contentType: "application/json;charset=UTF-8",
             dataType:"json",
             data:JSON.stringify(payload),
-            beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', value);
-            },
             }).done(function(data){
-            console.log("good job");
             });
 
         });
@@ -170,7 +159,6 @@ async function deleteCustomerProduct(obj){
 
     alert("照片刪除成功！");
     showCustomerProductsImage(obj);
-    var x = 1;
 }
 
 function saveEditCustomerProfile(){
@@ -191,18 +179,26 @@ function saveEditCustomerProfile(){
         contentType: "application/json;charset=UTF-8",
         dataType:"html",
         data:JSON.stringify(inputdata),
-        beforeSend: function (xhr) {
-        var value = 'Bearer '+localStorage.getItem("myJWT")
-        xhr.setRequestHeader('Authorization', value);
-        },
         success: function (data) {
-            showTable(2)
-            showCustomerProductList()
+            showTable(2);
+            showCustomerProductList();
         },
         error: function (xhr,status,error) {
-            errorBackToLogIn(xhr)
+            errorBackToLogIn(xhr);
         },
     });
+}
+
+function checkedInputBox(obj){
+    var dataId = obj.getAttribute("data-id");
+    var input = $("input[data-id='"+dataId+"']")[0].checked;
+    if (input){
+        $("input[data-id='"+dataId+"']").removeAttr('checked');
+    }
+    else{
+        $("input[data-id='"+dataId+"']").attr('checked','checked');
+    }
+
 }
 
 function readURL(input) {
@@ -222,8 +218,41 @@ function readURL(input) {
 }
 
 function deleteProduct(){
-    var x = $("#table1").find('input');
-    var xx = 1;
+    var inputs = $("#table1").find('input');
+    var selectedInput = [];
+    for (inputt of inputs){
+        if (inputt.checked ==true){
+            selectedInput.push(inputt.getAttribute("data-pdkey"));
+        }
+    }
+    if (selectedInput.length ==0){
+        alert("請選取要刪除的商品！");
+        return "";
+    }
+    var inputdata = {"product_id":selectedInput};
+
+    $.ajax({
+        url:"customer_delete_product_data",
+        method: "del",
+        contentType: "application/json;charset=UTF-8",
+        dataType:"json",
+        data:JSON.stringify(inputdata),
+        success: function (data) {
+            var status = data["status"];
+            if (status == "01"){
+                showTable(2);
+                showCustomerProductList();
+                alert("刪除成功");
+
+            }
+            else{
+                alert("刪除失敗");
+            }
+        },
+        error: function (xhr,status,error) {
+
+        },
+    });
 }
 
 function showTable(tableId){
@@ -304,7 +333,6 @@ function addCustomerProduct(){
 
 function showCustomerProductsImage(obj){
 //    var id = obj.id.split("_")[1];
-    var value = 'Bearer '+localStorage.getItem("myJWT");
     var productId = obj.getAttribute("data-productid");
     inputdata = {"product_id":productId}
     $.ajax({
@@ -313,9 +341,6 @@ function showCustomerProductsImage(obj){
         contentType: "application/json;charset=UTF-8",
         dataType:"html",
         data:JSON.stringify(inputdata),
-        beforeSend: function (xhr) {
-        xhr.setRequestHeader('Authorization', value);
-        },
         success: function (data) {
             showTable(6)
             $("#table-6").html(data)

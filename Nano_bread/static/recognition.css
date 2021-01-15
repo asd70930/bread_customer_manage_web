@@ -9,6 +9,9 @@
     position: relative;
     background-color: rgba(116, 116, 116, 0.1);
 }
+.margin-f-150{
+    margin-left:150px;
+}
 .img-map {
     max-height: 100%;
     max-width: 100%;
