@@ -230,6 +230,7 @@
 .layout-5{
     flex: 0 0 50%;
     max-width: 50%;
+    flex-direction:column;
 }
 .m-15{
     margin:15px;
@@ -352,6 +353,7 @@ ul,li{
     border-radius: 0.25rem;
     border: 1px solid #d8d8d8;
     transition: all 0.3s ease-in-out;
+    font-weight:700;
 }
 .ta-c {
     text-align: center;
@@ -427,4 +429,9 @@ ul,li{
 }
 .ta-r {
     text-align: right;
+}
+
+.modal-size{
+    width:700px;
+    height:800px;
 }

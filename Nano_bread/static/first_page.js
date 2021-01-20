@@ -15,33 +15,17 @@ $("#customerUploadImg").change(function(){
 });
 
 
-function imageAjax(srcs){
-    let flag = 0;
-    [].forEach.call(srcs,src =>{
-        $.ajax({
-            url:"/save_product_image",
-            async:false,
-            method: "post",
-            contentType: "application/json;charset=UTF-8",
-            dataType:"json",
-            data:JSON.stringify({"base64":src,"product_id":productIdSend(),"flag":flag}),
-        }).done(function(data){
-        });
-        flag +=1;
-    });
 
 
-}
 
-
-function imageAllAjax(srcs){
+function imageAllAjax(srcs,productId){
     $.ajax({
             url:"/save_product_image",
             async:false,
             method: "post",
             contentType: "application/json;charset=UTF-8",
             dataType:"json",
-            data:JSON.stringify({"base64":srcs,"product_id":productIdSend()})
+            data:JSON.stringify({"base64":srcs,"product_id":productId})
         }).done(function(data){
         });
 }
@@ -50,16 +34,14 @@ function imageAllAjax(srcs){
 
 async function productImageSave(obj){
     var srcArray = [];
+    var productId = obj.getAttribute("data-productid");
     let imgArray = $("#uploadLayout > li > div > div > img");
     [].forEach.call(imgArray, imgObj =>{
         srcArray.push(imgObj.getAttribute('src'))
     });
     if (srcArray.length ===0){alert("沒有上傳照片！");return ""}
-//    await imageAjax(srcArray);
-    imageAllAjax(srcArray);
+    imageAllAjax(srcArray, productId);
     // close modal and return to product_id images page
-
-    alert("上傳成功！");
 
     $("#uploadLayout").empty();
     showCustomerProductsImage(obj);
@@ -159,6 +141,7 @@ async function deleteCustomerProduct(obj){
 
     alert("照片刪除成功！");
     showCustomerProductsImage(obj);
+    $("#modal2").modal('hide');
 }
 
 function saveEditCustomerProfile(){
@@ -388,3 +371,17 @@ function setCameraPage(){
 
 }
 
+function getSelectedImage(obj){
+    var deleteArray = [];
+    var inputs = $("input[data-art5='input']");
+    [].forEach.call(inputs, input =>{
+        if (input.checked == true){
+            deleteArray.push(input.getAttribute("data-path"))
+        }
+    });
+    var inputLen = deleteArray.length.toString()
+    var text =  "選擇"+inputLen+"張圖片是否刪除？";
+    var productId = obj.getAttribute("data-productid");
+    $("#pShowImgCounts").text(text);
+    $("#bt_delImage").attr("data-productid", productId);
+}

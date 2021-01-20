@@ -226,8 +226,16 @@ function initCamera(data){
         number = data[i][0];
         canvas = new myCanvas(number);
 
-        painted = data[i][1]["painted"];
+        var hasFrame = data[i][1]["hasFrame"];
+        canvas.set_hasFrame(hasFrame);
+        if (hasFrame){
+            var AnchorHeight = data[i][1]["AnchorHeight"];
+            var AnchorWidth  = data[i][1]["AnchorWidth"];
+            canvas.set_AnchorHeight = AnchorHeight;
+            canvas.set_AnchorWidth  = AnchorWidth;
+        }
 
+        var painted = data[i][1]["painted"];
         if (painted){
             canvas.initSetXYList(data[i][1]);
             canvas.set_isPainted(painted);
