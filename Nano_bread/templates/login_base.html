@@ -20,21 +20,18 @@
 
     {%- endblock scripts %}
 
-    <nav class="navbar navbar-dark bg-dark box-shadow">
-
-
-        <div class="container d-flex justify-content-between">
-          <a href="/"><img href="/" class="navbar-brand" width="150" height="150" src="{{ url_for('static' ,filename='EZchainLogo.png') }}"></a>
-            <h1 class="title-text big-tittle">Management System</h1>
-          <div class="btn-group dropdown userlogin flex-end">
-                    <button type="button" id="bt_email" class="btn btn-sm btn-light dropdown-toggle" aria-expanded="false"></button>
-                    <div class="dropdown-menu dropdown-menu-right" style="display: none;">
-                        <a class="dropdown-item tab-btn" tab-href="#tab-content-1">修改密碼</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/vcms_logout/view">登出</a>
-                    </div>
-                </div>
-        </div>
+    <nav class="navbar navbar-dark bg-dark box-shadow row">
+            <div class="col-2"></div>
+            <div class="col-1">
+                <a href="/" class="">
+                    <img class="navbar-brand" width="150" height="150" src="{{ url_for('static' ,filename='EZchainLogo.png') }}">
+                </a>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-5 pl-5">
+                <h1 class="title-text big-tittle">Management System</h1>
+            </div>
+            <div class="col-3"></div>
     </nav>
 
 </head>

@@ -103,7 +103,7 @@ function readUrlMultiple(input) {
 }
 
 function goRecognitionPage(){
-    window.location.href='recognitionPage';
+    window.location.href='recognitionPage/pageChangeCameraROI';
 }
 
 function backToCustomerProductList(){
@@ -379,9 +379,14 @@ function getSelectedImage(obj){
             deleteArray.push(input.getAttribute("data-path"))
         }
     });
+    if (deleteArray.length==0){
+        alert("尚未選取要刪除的圖片！");
+        return "";
+    }
     var inputLen = deleteArray.length.toString()
     var text =  "選擇"+inputLen+"張圖片是否刪除？";
     var productId = obj.getAttribute("data-productid");
     $("#pShowImgCounts").text(text);
     $("#bt_delImage").attr("data-productid", productId);
+    $("#modal2").modal('show');
 }

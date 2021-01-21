@@ -16,3 +16,107 @@
     width: 300px;
     height: 300px;
 }
+.customize-btn{
+    position: relative;
+}
+.customize-btn:hover .block-top{
+    display:block;
+}
+.customize-btn:hover .block-bottom{
+    display:block;
+}
+.block-top{
+    display:none;
+    position: absolute;
+    transition: opacity 1s;
+    width: auto;
+    padding: 0.25rem 0.5rem;
+    color: #fff;
+    transition: opacity 1s;
+    text-align: center;
+    background-color: #000;
+    border-radius: 0.25rem;
+    bottom: 130%;
+    left: 50%;
+    font-size:20px;
+    transform: translate(-50%, 0%);
+}
+.block-top::after {
+    content: "";
+    position: absolute;
+    border-width: 5px;
+    border-style: solid;
+}
+.block-top::after {
+    border-color: #000 #000 transparent transparent;
+    border-style: solid solid solid solid;
+
+    /* 設定邊框大小可拼湊出任意形狀的三角形 */
+    border-width: 12px 7px 12px 7px;
+
+    bottom: -19px;
+
+    /* 必須指定，才能顯示內容 */
+    content: "";
+
+    height: 0px;
+    left: 40%;
+
+    /* 必須指定，否則會變梯形 */
+    position: absolute;
+    opacity: 1;
+    width: 0px;
+}
+
+.block-bottom{
+    display:none;
+    position: absolute;
+    transition: opacity 1s;
+    width: auto;
+    padding: 0.25rem 0.5rem;
+    color: #fff;
+    transition: opacity 1s;
+    text-align: center;
+    background-color: #000;
+    border-radius: 0.25rem;
+    top: 110%;
+    left: 50%;
+    font-size:20px;
+    transform: translate(-50%, 0%);
+}
+.block-bottom::after {
+    content: "";
+    position: absolute;
+    border-width: 5px;
+    border-style: solid;
+}
+.block-bottom::after {
+    border-color: transparent transparent #000 #000 ;
+    border-style: solid ;
+
+    /* 設定邊框大小可拼湊出任意形狀的三角形 */
+    border-width: 12px 7px 12px 7px;
+
+    top: -19px;
+
+    /* 必須指定，才能顯示內容 */
+    content: "";
+
+    height: 0px;
+    left: 40%;
+
+    /* 必須指定，否則會變梯形 */
+    position: absolute;
+
+    width: 0px;
+}
+.f-20{
+    font-size:20px !important;
+}
+.f-16{
+    font-size:16px !important;
+}
+.svg-size{
+    width:32px;
+    height:32px;
+}
