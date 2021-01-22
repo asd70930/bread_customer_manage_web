@@ -1,6 +1,24 @@
-
 var classDict = {}; // key is string as "1", "2"
 
+$(document).ready(function() {
+    $.ajax({
+        url:"/camera_set",
+        method: "get",
+        contentType: "application/json;charset=UTF-8",
+        dataType:"json",
+        success: function (data) {
+            showTable(7);
+
+            if (data["status"]==1){
+                $("#table").html(data["html"]);
+                initCamera(data["camData"]);
+            }
+        },
+        error: function (xhr,status,error) {
+                alert('try it later')
+        },
+    });
+});
 
 
 function testing(){

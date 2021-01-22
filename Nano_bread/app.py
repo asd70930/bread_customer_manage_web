@@ -175,6 +175,19 @@ def first_page():
     return render_template('first_page.html')
 
 
+
+@app.route('/customer/cameraSetting')
+def cameraSetting():
+    """
+    進入客戶攝影機設定的頁面
+    :return:
+    """
+    return render_template('setCamera.html')
+
+
+
+
+
 @app.route('/recognitionPage', methods=['GET'])
 def recognition_page():
     """
@@ -195,6 +208,15 @@ def page_change_camera_roi():
 
     return render_template('cameraROI.html')
 
+
+@app.route('/customer/products', methods=['GET'])
+def customer_products():
+    """
+    進入客戶產品清單的頁面
+    :return:
+    """
+
+    return render_template('customerProductList.html')
 
 
 @app.route('/recognitionPage/pageChangeCameraROI/roiInference', methods=['POST'])

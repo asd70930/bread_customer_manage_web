@@ -3,33 +3,15 @@
 {% block page_content %}
 
 <link rel=stylesheet type="text/css" href="{{ url_for('static', filename = 'first_page.css') }}">
-<link rel=stylesheet type="text/css" href="{{ url_for('static', filename = 'roi9Recognition.css') }}">
 
 <body>
     <div class="container">
         <div class="f-20">
-            <article id="table-1"  style="">
 
-                <div class="row">
-                    <p class="w-md-50 mx-auto text-center title-font">
-                        麵包辨識管理系統
-                    </p>
-                </div>
-                <div class="row">
-                    <img class="w-md-50 mx-auto" width="800px;" src="{{ url_for('static', filename = 'bread_title.jpg') }}">
-                </div>
-
-            </article>
-<!--     商品總清單頁面       -->
+            <!--     商品總清單頁面       -->
             <article id="table-2" class=" h-title" style="display:none;">
                 <div class="title mb-3">商品清單</div>
                 <div class="mb-3 m-left-200">
-                    <button class="btn btn-success customize-btn f-20 mx-3" onclick="showTable(1)" >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="svg-size bi bi-arrow-return-left" viewBox="0 0 16 16">
-                          <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"></path>
-                        </svg>
-                        <span class="block-top" style=""> 返回</span>
-                    </button>
                     <button class="btn btn-success customize-btn f-20 mx-3" onclick="addCustomerProduct()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="svg-size bi bi-plus-circle" viewBox="0 0 16 16">
                           <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -51,7 +33,8 @@
                 </div>
             </article>
 
-<!--     customer_editProductData             -->
+
+            <!--     customer_editProductData             -->
             <article id="table-5" class=" h-title" style="display:none;">
 
 
@@ -60,42 +43,8 @@
 <!--     reveal_customer_productdataimg             -->
             <article id="table-6" class="col-lg-12 h-title" style="display:none;">
             </article>
-<!--     setting camera             -->
-            <article id="table-7" class=" h-title" style="display:none;">
-                <div class="title mb-3">攝影機調整</div>
-                <div class="mb-3 m-left-200">
-                    <button class="btn btn-success customize-btn f-20 mx-3" onclick="showTable(1)" >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="svg-size bi bi-arrow-return-left" viewBox="0 0 16 16">
-                          <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"></path>
-                        </svg>
-                        <span class="block-top" style=""> 返回</span>
-                    </button>
-                    <button class="btn btn-success customize-btn f-20 mx-3" onclick="createNewCamera()" >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="svg-size bi bi-camera-video" viewBox="0 0 16 16">
-                          <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175l3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z"/>
-                        </svg>
-                        <span class="block-top" style=""> 新增攝影機</span>
-                    </button>
-                    <button class="btn btn-success customize-btn f-20 mx-3" onclick="saveCamera()" >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="svg-size bi bi-save2" viewBox="0 0 16 16">
-                          <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v4.5h2a.5.5 0 0 1 .354.854l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5A.5.5 0 0 1 5.5 6.5h2V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
-                        </svg>
-                        <span class="block-top" style=""> 儲存</span>
-                    </button>
-<!--                    <button class="btn btn-outline-danger" onclick="testing()">TEST</button>-->
-                </div>
 
 
-                <div id="table">
-
-                </div>
-
-            </article>
-
-
-
-
-<!--    modal customer add images to product      -->
             <div class="modal fade" id="modal1"  tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
@@ -170,18 +119,11 @@
                 </div>
             </div>
 
-
-
-
-
-
         </div>
     </div>
-
 </body>
 
 
 <script src="{{url_for('static', filename='first_page.js')}}"></script>
-
+<script src="{{url_for('static', filename='customerProducts.js')}}"></script>
 {% endblock %}
-

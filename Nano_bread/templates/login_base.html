@@ -11,8 +11,6 @@
     <link rel=stylesheet type="text/css" href="{{ url_for('static', filename = 'main_struct.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     {% block scripts %}
-
-<!--    <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
@@ -27,11 +25,18 @@
                     <img class="navbar-brand" width="150" height="150" src="{{ url_for('static' ,filename='EZchainLogo.png') }}">
                 </a>
             </div>
-            <div class="col-1"></div>
-            <div class="col-5 pl-5">
-                <h1 class="title-text big-tittle">Management System</h1>
+            <div class="col-7 ">
+                <div class="row justify-content-end">
+                    <a href="/" class="">
+                        <p class="white-title" >首頁</p>
+                    </a>
+                    <p class="white-title" onclick="goCustomerProductListPage()">商品清單</p>
+                    <p class="white-title" onclick="setCameraPage()">設定攝影機</p>
+                    <p class="white-title" onclick="goRecognitionPage()">ROI辨識</p>
+                    <p class="white-title">登入</p>
+                </div>
             </div>
-            <div class="col-3"></div>
+            <div class="col-2 "></div>
     </nav>
 
 </head>
@@ -43,5 +48,8 @@
 
 
 </body>
+<!--<footer>-->
+<!--    <nav class="navbar navbar-dark bg-dark box-shadow row">Copyright © All Rights Reserved</nav>-->
+<!--</footer>-->
 <!--<script src="{{url_for('static', filename='verifyjwt.js')}}"></script>-->
 </html>

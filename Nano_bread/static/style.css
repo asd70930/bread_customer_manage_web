@@ -116,7 +116,27 @@
 .f-16{
     font-size:16px !important;
 }
+.title-font{
+    font-size:32px !important;
+    font-weight:bold;
+
+}
 .svg-size{
     width:32px;
     height:32px;
+}
+.white-title{
+    font-size:20px !important;
+    color:white;
+    margin-left:10px;
+    margin-right:10px;
+    cursor: pointer;
+}
+.white-title:hover{
+    color:DarkGray;
+}
+
+.margin-20{
+    margin-left:20%;
+    margin-right:20%;
 }

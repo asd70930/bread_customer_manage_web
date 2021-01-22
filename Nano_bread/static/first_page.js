@@ -14,10 +14,6 @@ $("#customerUploadImg").change(function(){
     readUrlMultiple(this);
 });
 
-
-
-
-
 function imageAllAjax(srcs,productId){
     $.ajax({
             url:"/save_product_image",
@@ -102,8 +98,13 @@ function readUrlMultiple(input) {
     }
 }
 
+function goCustomerProductListPage(){
+    window.location.href='/customer/products';
+}
+
+
 function goRecognitionPage(){
-    window.location.href='recognitionPage/pageChangeCameraROI';
+    window.location.href='/recognitionPage/pageChangeCameraROI';
 }
 
 function backToCustomerProductList(){
@@ -157,7 +158,7 @@ function saveEditCustomerProfile(){
                  "img":imgscr
     }
     $.ajax({
-        url:"customer_saveProductData",
+        url:"/customer_saveProductData",
         method: "post",
         contentType: "application/json;charset=UTF-8",
         dataType:"html",
@@ -215,7 +216,7 @@ function deleteProduct(){
     var inputdata = {"product_id":selectedInput};
 
     $.ajax({
-        url:"customer_delete_product_data",
+        url:"/customer_delete_product_data",
         method: "del",
         contentType: "application/json;charset=UTF-8",
         dataType:"json",
@@ -252,7 +253,7 @@ function showTable(tableId){
 
 function showCustomerProductList(){
     $.ajax({
-        url:"customer_productData",
+        url:"/customer_productData",
         method: "get",
         contentType: "application/json;charset=UTF-8",
         dataType:"html",
@@ -351,23 +352,9 @@ function getNum(text){
 }
 
 function setCameraPage(){
-    $.ajax({
-        url:"/camera_set",
-        method: "get",
-        contentType: "application/json;charset=UTF-8",
-        dataType:"json",
-        success: function (data) {
-            showTable(7);
+    window.location.href='/customer/cameraSetting';
 
-            if (data["status"]==1){
-                $("#table").html(data["html"]);
-                initCamera(data["camData"]);
-            }
-        },
-        error: function (xhr,status,error) {
-                alert('try it later')
-        },
-    });
+
 
 }
 
