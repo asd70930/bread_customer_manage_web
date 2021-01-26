@@ -120,7 +120,7 @@ function roiInference(){
 
 
             if(itemDic["item"].length>0){
-                for (itemsDic of itemDic["item"])
+                for (itemsDic of itemDic["item"]){
                     var itemRoi = itemsDic["position"];
                     var color = get_rand_color();
                     // realId is object detection model id transfer to customer product id
@@ -128,6 +128,7 @@ function roiInference(){
                     drawCanvas(itemRoi, color, id,AnchorWidth,AnchorHeight);
     //                $("div[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
                     $(".ans[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
+                    }
             }
 
         }

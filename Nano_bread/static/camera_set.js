@@ -249,8 +249,8 @@ function initCamera(data){
         if (hasFrame){
             var AnchorHeight = data[i][1]["AnchorHeight"];
             var AnchorWidth  = data[i][1]["AnchorWidth"];
-            canvas.set_AnchorHeight = AnchorHeight;
-            canvas.set_AnchorWidth  = AnchorWidth;
+            canvas.set_AnchorHeight(AnchorHeight);
+            canvas.set_AnchorWidth(AnchorWidth);
         }
 
         var painted = data[i][1]["painted"];

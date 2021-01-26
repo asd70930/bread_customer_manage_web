@@ -107,6 +107,7 @@ def roiInference():
         username = USERFILE
         request_data = request.get_json()
         datas = request_data["data"]
+        print('get input datas:', datas)
         # keep_data = [[key,AnchorWidth, AnchorHeight],[key,AnchorWidth, AnchorHeight],....]
         keep_data = []
         datas_jetson  = []
@@ -131,9 +132,10 @@ def roiInference():
                 coordinates.append([x, y])
             datas_jetson.append({"id": i, "cam_type": "ip_cam", "cam_addr": ip, "roi": coordinates})
 
-        send_data = {"function": "nine",
-                      "values": datas_jetson
-        }
+        send_data = {
+            "function": "nine",
+            "values": datas_jetson
+                    }
         print()
         # try:
         if not TESTING_NOT_CONNET_JETSON_NANO:
