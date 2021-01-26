@@ -117,21 +117,27 @@ function roiInference(){
             cleanCanvas(id);
             $("img[data-camkey='"+id+"']").attr("src",imgBase64);
             drawCanvas(roi,"rgb(255,0,0)", id,AnchorWidth,AnchorHeight);
-
-
-            if(itemDic["item"].length>0){
-                for (itemsDic of itemDic["item"]){
-                    var itemRoi = itemsDic["position"];
-                    var color = get_rand_color();
-                    // realId is object detection model id transfer to customer product id
-                    var realId = itemsDic["real_id"];
-                    drawCanvas(itemRoi, color, id,AnchorWidth,AnchorHeight);
-    //                $("div[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
-                    $(".ans[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
-                    }
-            }
-
         }
+
+
+        for (i=0;i<data["position"].length;i++){
+            var keys = Object.keys(data["position"][i]);
+            for (key of keys){
+                var camId = data["position"][i][key]["cam_id"];
+                var realId = data["position"][i][key]["real_id"];
+                var itemRoi = data["position"][i][key]["position"];
+                var AnchorWidth = data["position"][i][key]["AnchorWidth"];
+                var AnchorHeight = data["position"][i][key]["AnchorHeight"];
+                var color = get_rand_color();
+                for(position of itemRoi){
+                    drawCanvas(position, color, camId, AnchorWidth, AnchorHeight);
+                    $("div[data-camkey='"+camId+"']").find(".ans[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
+//                    $(".ans[data-camkey='"+realId+"']").attr("style","border-style:solid;border-color:"+color+";");
+                }
+            }
+        }
+
+
 
         $("div[data-camkey='total']").attr("style","border-style:solid;border-color:black;");
         var xx = 123;

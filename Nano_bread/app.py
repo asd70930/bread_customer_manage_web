@@ -209,9 +209,9 @@ def roiInference():
         image_count = len(response_data["items"])
         items_datas = {}
         htmls = []
+        data_locations = []
         for i in range(image_count):
             item_datas = {}
-
             # set original data-key, anchorWidth and anchorHeight  to response
             response_data["items"][i]["id"] = keep_data[i][0]
             response_data["items"][i]["AnchorWidth"] = keep_data[i][1]
@@ -239,23 +239,33 @@ def roiInference():
                 max_name = name_dict[max_id]
                 if max_id in item_datas:
                     item_datas[max_id]["count"] += 1
+                    item_datas[max_id]["position"].append(response_data["items"][i]["item"][l]["position"])
                 else:
-                    item_datas[max_id] = {"count": 1, "name": max_name}
+                    item_datas[max_id] = {
+                        "AnchorWidth": keep_data[i][1],
+                        "AnchorHeight": keep_data[i][2],
+                        "count": 1,
+                        "name": max_name,
+                        "position": [response_data["items"][i]["item"][l]["position"]],
+                        "cam_id": response_data["items"][i]["id"],
+                        "real_id": max_id
+                    }
                 if max_id in items_datas:
                     items_datas[max_id]["count"] += 1
                 else:
                     items_datas[max_id] = {"count": 1, "name": max_name}
 
+
             # item_datas is one image all product id and name and count
             html = html_camera_roi_inference_table_maker(item_datas, percentage_response, False)
-
+            data_locations.append(item_datas)
             htmls.append({"key": keep_data[i][0], "html": html})
 
         total_percentage = total_percentage/image_count
         html = html_camera_roi_inference_table_maker(items_datas, total_percentage, True)
         htmls.append({"key": "total", "html": html})
         response_data["html"] = htmls
-
+        response_data["position"] = data_locations
         return response_data
 
 
