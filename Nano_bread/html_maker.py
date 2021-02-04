@@ -8,6 +8,7 @@ import front_config
 
 CUSTOMER_FILE = front_config.CUSTOMER_FILE
 
+
 def html_camera_roi_inference_table_maker(data, percentage, total):
     """
     camera roi inference 回傳結果
@@ -15,7 +16,7 @@ def html_camera_roi_inference_table_maker(data, percentage, total):
     :param data:
     :param percentage:
     :param total: type bool , is total table or not
-    :return:
+    :return: html 交給JS渲染網頁
     """
     keys = data.keys()
 
@@ -31,7 +32,7 @@ def html_camera_roi_inference_table_maker(data, percentage, total):
             dom_body["data-camkey"] = key
 
         dom_body = soup_table.find("p", class_="product_id")
-        dom_body.string = key
+        dom_body.string = "料號："+key
         dom_body = soup_table.find("p", class_="product_name")
         dom_body.string = data[key]["name"]
         dom_body = soup_table.find("div", class_="count")
@@ -46,6 +47,7 @@ def html_camera_roi_inference_table_maker(data, percentage, total):
     html = body.prettify()
     return html
 
+
 def html_camera_roi_table_maker(data):
     """
     由camera.data所紀錄的camera資訊
@@ -54,12 +56,15 @@ def html_camera_roi_table_maker(data):
     :return:
     """
     keys = data.keys()
+    # 初始img 使用 static/A.png 當圖片
     img_path = 'static/A.png'
     img = cv2.imread(img_path)
     img_src = cv2_strbase64(img)
-
     coordinates = []
     body = BeautifulSoup()
+
+    # 由camera.data所紀錄的camera資訊
+    # 將其自動打印多個攝影欄位並付再cameraROI.html中
     for key in keys:
         if not data[key]["hasFrame"]:
             continue
@@ -81,19 +86,14 @@ def html_camera_roi_table_maker(data):
         dom_body = soup_table.find("input")
         dom_body["value"] = data[key]["ip"]
         dom_body["data-camkey"] = key
-
         dom_body = soup_table.find("canvas")
         dom_body["data-camkey"] = key
-
         dom_body = soup_table.find("img")
         dom_body["src"] = img_src
         dom_body["data-camkey"] = key
-
         dom_body = soup_table.find("div", class_="roi_table")
         dom_body["data-camkey"] = key
-
         body.append(soup_table)
-
     html = body.prettify()
     return {"html": html, "data": coordinates}
 
@@ -145,7 +145,13 @@ def html_editcustomer_productMaker(customername, productId):
 
 
 def html_customer_product_image_viewMaker(customername, productId):
-    images  = []
+    """
+    動態產生客戶商品的所有商品圖片HTML交由JS渲染頁面
+    :param customername: 此專案都預設為ROOT 沒有其他使用者
+    :param productId: 產品的ID
+    :return: html: 動態產生的HTML
+    """
+    images = []
     alllist = listdir(CUSTOMER_FILE + str(customername)+'/'+str(productId))
     for file in alllist:
         data_type = file.split(".")[-1]
@@ -155,6 +161,7 @@ def html_customer_product_image_viewMaker(customername, productId):
                 images.append(file)
     images_length = len(images)
     data_url = CUSTOMER_FILE + str(customername)+'/'+str(productId) + '/data.data'
+    # 開始動態產生HTML
     with open(data_url) as json_file:
         data = json.load(json_file)
         product_name = data["product_name"]
@@ -184,22 +191,19 @@ def html_customer_product_image_viewMaker(customername, productId):
         table_body["data-path"] = image_path
         table_body["data-id"] = id
         table_body = soup_body.find("input")
-        # table_body["id"] = "inputSelect%s" + id
-        # table_body = soup_body.find("label")
         table_body["for"] = "inputSelect%s" + id
         table_body["data-id"] = id
         img_ul.append(soup_body)
-
-    output = soup_table.prettify()
-
-    return output
+    html = soup_table.prettify()
+    return html
 
 
 def html_customer_productMaker(customername, this_list):
     """
-    :param customername:
-    :param this_list:
-    :return:
+    取得客戶所有商品明細並動態產生html回傳至前端顯示
+    :param customername: 此專案都預設為ROOT 沒有其他使用者
+    :param this_list: 將/customer/root/搜索有多少資料夾，表示有多少商品 , type = list
+    :return: html (type = str), html 交給JS渲染網頁
     """
     url = "templates/customerProductTable.html"
     soup_table = BeautifulSoup(open(url), 'html.parser')
@@ -211,6 +215,8 @@ def html_customer_productMaker(customername, this_list):
         data_url = "customer/"+customername+"/"+name+"/data.data"
         url = "templates/tr_tlp.html"
         soup_body = BeautifulSoup(open(url), 'html.parser')
+
+        # 開始動態產生HTML
         with open(data_url) as json_file:
             # 依照開會內容將商品清單的順序改為
             # 品名> 料號 > 商品圖片
@@ -231,10 +237,8 @@ def html_customer_productMaker(customername, this_list):
             bodys[3].append(newtag)
             # 品名
             bodys[1].string = data["product_name"]
-
             bodys[4].string = data["memo"]
             bodys[5].string = data["image_count"]
-
             new_button = soup.new_tag(name="button",
                                       attrs={"class": "btn btn-success customize-btn f-20 mx-3",
                                              "onclick": "showCustomerEditProduct(this)",
@@ -260,14 +264,12 @@ def html_customer_productMaker(customername, this_list):
             new_button.append(new_svg)
             new_button.append(new_span)
             bodys[6].append(new_button)
-
             new_button = soup.new_tag(name="button",
                                       attrs={"class": "btn btn-success customize-btn f-20 mx-3",
                                              "onclick": "showCustomerProductsImage(this)",
                                              "data-productID": data["product_id"],
                                              "type": "button"
                                              })
-
             new_svg = soup.new_tag(name="svg",
                                    attrs={"xmlns": "http://www.w3.org/2000/svg",
                                           "fill": "currentColor",
@@ -277,28 +279,36 @@ def html_customer_productMaker(customername, this_list):
             new_path = soup.new_tag(name="path",
                                     attrs={
                                         "d": "M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"})
-
             new_span = soup.new_tag(name="sapn",
                                     attrs={"class": "block-bottom"})
             new_span.string = "圖資"
-
             new_svg.append(new_path)
             new_button.append(new_svg)
             new_button.append(new_span)
-
             bodys[6].append(new_button)
             soup_table.tbody.append(soup_body)
-    output = soup_table.prettify()
-    return output
+    html = soup_table.prettify()
+    return html
 
 
 def html_camera_maker(dic_data):
+    """
+    根據camera.data的資料動態產生HTML頁面後回傳至前端
+    :param dic_data: camera.data 讀取資料 as dict type
+    :return: {
+        "html": str,
+        "camData": list,
+        "status": int
+    }
+        html = 動態產生HTML頁面後回傳至前端直接貼上
+        camData = 保存攝影機ROI四角座標交給前端渲染網頁
+        status = 狀態碼 1表示正常 0表示客戶尚未儲存任何攝影機資料
+    """
     keys = dic_data.keys()
     if len(keys) == 0:
         return {"html": "", "status": 0}
-
     coordinates = []
-
+    # 開始動態產生HTML
     soup = BeautifulSoup()
     for key in keys:
         url = "templates/roiRecognitionTable.html"
@@ -311,6 +321,9 @@ def html_camera_maker(dic_data):
             table_body["data-camkey"] = key
         table_body = soup_table.find("img")
         table_body["data-camkey"] = key
+        if "img_base64" in dic_data[key]:
+            if dic_data[key]["img_base64"] != "":
+                table_body["src"] = dic_data[key]["img_base64"]
         table_body = soup_table.find("canvas")
         table_body["data-camkey"] = key
         table_body = soup_table.find("div", class_="camera_table")
@@ -324,11 +337,22 @@ def html_camera_maker(dic_data):
 
 
 def html_camera_create_maker(dic_data):
-    while(True):
+    """
+    產新新的不重複KEY並動態產生HTML頁面後回傳至前端
+    :param dic_data: camera.data 讀取資料 as dict type
+    :return:{
+        "html": str,
+        "camData": list,
+        "status": int
+    }
+        html = 動態產生HTML頁面後回傳至前端直接貼上
+        id = 不重複KEY
+        status = 狀態碼 1表示正常 0表示客戶尚未儲存任何攝影機資料
+    """
+    while True:
         key = generate_random_str(4)
         if key not in dic_data:
             break
-
     url = "templates/roiRecognitionTable.html"
     soup_table = BeautifulSoup(open(url), 'html.parser')
     table_body = soup_table.find("input")
@@ -346,4 +370,4 @@ def html_camera_create_maker(dic_data):
     table_body = soup_table.find("hr")
     table_body["data-camkey"] = key
     html = soup_table.prettify()
-    return {"html": html, "status": 1, "id":key}
+    return {"html": html, "status": 1, "id": key}

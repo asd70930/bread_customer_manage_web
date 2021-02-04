@@ -1,20 +1,16 @@
 let uploadImageBase64List = [];
+// 限制圖片檔案上傳最大SIZE
 var filesizeLimit = 6 * 1024 * 1024;
 
-$("#syBt_3").click(function(){
-    showTable(1);
-});
-$("#tb1_bt1").click(function(){
-    // 呈現客戶所有產品清單頁面
-    showTable(2);
-    showCustomerProductList();
-});
+
 $("#customerUploadImg").change(function(){
+    // 點選上傳按鈕會重新清空以選擇的圖片
     $("#uploadLayout").empty();
     readUrlMultiple(this);
 });
 
 function imageAllAjax(srcs,productId){
+    // 上傳所有以選擇的圖片至後端等後續再傳送至Jetson nano 辨識物件
     $.ajax({
             url:"/save_product_image",
             async:false,
@@ -26,9 +22,8 @@ function imageAllAjax(srcs,productId){
         });
 }
 
-
-
 async function productImageSave(obj){
+    // 上傳所有選擇的圖片至後端
     var srcArray = [];
     var productId = obj.getAttribute("data-productid");
     let imgArray = $("#uploadLayout > li > div > div > img");
@@ -46,11 +41,15 @@ async function productImageSave(obj){
 }
 
 function closeModal(){
+    // 關閉選擇上傳圖片的Modal後將選擇圖片的文字改成選擇0張
     $("#uploadLayout").empty();
     $("p[class='f-l ml-3']").text("選擇圖片0張");
 }
 
 function removeUploadImage(obj){
+    /*
+        刪除正在選擇上傳的圖片
+    */
     var id = 0;
     id = parseInt(obj.getAttribute("data-key"));
     $("#uploadLayout > li[data-key='"+id.toString()+"']").remove();
@@ -92,18 +91,20 @@ function readUrlMultiple(input) {
         }, false);
         reader.readAsDataURL(file);
     }
-
     if (files) {
         [].forEach.call(files, readAndPreview);
     }
 }
 
+
 function goCustomerProductListPage(){
+    // 切換至客戶產品清單頁面
     window.location.href='/customer/products';
 }
 
 
 function goRecognitionPage(){
+    // 切換至攝影機辨識頁面
     window.location.href='/recognitionPage/pageChangeCameraROI';
 }
 
@@ -114,6 +115,7 @@ function backToCustomerProductList(){
 }
 
 async function deleteCustomerProduct(obj){
+    // 刪除產品圖資功能
     var deleteArray = [];
     var productId = obj.getAttribute("data-productid");
     var inputs = $("input[data-art5='input']");
@@ -137,14 +139,13 @@ async function deleteCustomerProduct(obj){
 
         });
     }
-
     await ajax_(deleteArray,productId);
-
     alert("照片刪除成功！");
     showCustomerProductsImage(obj);
     $("#modal2").modal('hide');
 }
 
+//
 function saveEditCustomerProfile(){
     var preProductId = $("#pre_barcode_error").val();
     var productId = $("#barcode_error").val();
@@ -185,7 +186,9 @@ function checkedInputBox(obj){
 
 }
 
+
 function readURL(input) {
+    // 讀取圖片檔案並顯示再img上
     if (input.files && input.files[0]) {
         if (filesizeLimit <= input.files[0].size) {
             alert("圖片檔案無法上傳大於2MB");
@@ -201,7 +204,9 @@ function readURL(input) {
     }
 }
 
+
 function deleteProduct(){
+    // 選定幾個產品清單並刪除
     var inputs = $("#table1").find('input');
     var selectedInput = [];
     for (inputt of inputs){
@@ -227,14 +232,13 @@ function deleteProduct(){
                 showTable(2);
                 showCustomerProductList();
                 alert("刪除成功");
-
             }
             else{
                 alert("刪除失敗");
             }
         },
         error: function (xhr,status,error) {
-
+            alert("刪除失敗");
         },
     });
 }
@@ -266,13 +270,15 @@ function showCustomerProductList(){
     });
 }
 
+
 function productIdSend(){
+    // 傳送產品ID給令個頁面
     id = $("h4[class='float-r m-t-5']").attr("data-id");
     return id
 }
 
+//
 function showCustomerEditProduct(obj){
-//    var id = obj.id.split("_")[1];
     var value = 'Bearer '+localStorage.getItem("myJWT");
     var productId = obj.getAttribute("data-productID");
     inputdata = {"product_id":productId}
@@ -316,7 +322,6 @@ function addCustomerProduct(){
 
 
 function showCustomerProductsImage(obj){
-//    var id = obj.id.split("_")[1];
     var productId = obj.getAttribute("data-productid");
     inputdata = {"product_id":productId}
     $.ajax({
@@ -345,6 +350,7 @@ function errorBackToLogIn(xhr){
        }
 }
 
+
 function getNum(text){
     // only get number and English letter
 	var value = text.replace(/[^0-9a-zA-Z]/ig,"");
@@ -352,13 +358,16 @@ function getNum(text){
 }
 
 function setCameraPage(){
+    /*
+        切換至設定攝影機頁面
+    */
     window.location.href='/customer/cameraSetting';
-
-
-
 }
 
 function getSelectedImage(obj){
+    /*
+        選擇要刪除的商品圖片，會先經過一次確認後才會真的刪除
+    */
     var deleteArray = [];
     var inputs = $("input[data-art5='input']");
     [].forEach.call(inputs, input =>{

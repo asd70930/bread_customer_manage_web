@@ -21,10 +21,6 @@ $(document).ready(function() {
 });
 
 
-function testing(){
-    var xxx = 1111;
-}
-
 function mouseXY(obj,e){
     var id = obj.getAttribute("data-camkey")
     var canvas = classDict[id]
@@ -55,11 +51,8 @@ function drawCanvas(obj){
     x = canvas.get_mouseX(x)
     y = canvas.get_mouseY(y)
     canvas.addClickFlag()  // flag += 1
-
     canvas.xyListAppend([x,y])
     flag = canvas.get_clickFlag()
-
-
     canva = $("canvas[data-camkey='"+id+"']")[0] ; // get canvas DOM , only use in once time
     ctx = canva.getContext('2d');
 
@@ -67,7 +60,6 @@ function drawCanvas(obj){
         ctx.strokeStyle = "rgb(255,0,0)"; // Red line
         clean(ctx,canvas);
         drawLine(ctx,canvas);
-//        canvas.xyListClean();
         canvas.set_isPainted(true);
     }
     else{
@@ -115,6 +107,8 @@ function saveCamera(){
     for (key in classDict){
         sendData = {};
         ip = $("input[data-camkey='"+key+"']").val();
+        imgSrc = $("img[data-camkey='"+key+"']").attr("src");
+        sendData["img_base64"] = imgSrc;
         sendData["ip"] = ip;
         painted = classDict[key].get_isPainted();
         hasFrame = classDict[key].get_hasFrame();
@@ -144,8 +138,6 @@ function saveCamera(){
         else{
             sendData["hasFrame"] = hasFrame;
         }
-
-
         payload[key] = sendData;
     }
 

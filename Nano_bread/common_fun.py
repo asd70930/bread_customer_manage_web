@@ -26,12 +26,22 @@ def get_json_image_count(path):
 
 
 def check_root_file():
+    """
+    check root file path exited or not ,
+    if not exited, create it.
+    :return:
+    """
     path = "customer/root"
     folder = exists(path)
     if not folder:
         makedirs(path)
 
+
 def random_product_id(customer):
+    """
+    當找不到合適的產品ID隨機挑選現有的產品ID回傳
+    :return: 隨機產品ID
+    """
     dir_list = []
     path = CUSTOMER_FILE + customer+'/'
     files = listdir(path)
@@ -39,16 +49,21 @@ def random_product_id(customer):
     for file in files:
         if isdir(path+file):
             dir_list.append(file)
-
     random.shuffle(dir_list)
     return dir_list[0]
 
 
 def save_customer_product_profile(data, path):
-
+    """
+    依照前端給予的資料修改客戶某個產品的資料
+    依照網頁點選可以是新增產品資料或是修改產品資料
+    :param data: 前端給予的產品資料
+    :param path: customer/root/
+    :return:
+    """
     # path = customer/root/
-    imagebase    = data["img"]
-    product_id   = data["product_id"]
+    imagebase = data["img"]
+    product_id = data["product_id"]
     pre_product_id = data["pre_product_id"]
 
     if pre_product_id == "":
@@ -73,9 +88,6 @@ def save_customer_product_profile(data, path):
 
         # add data.data
         init_image_json_data(data_path, save_data)
-
-
-
     else:
         # 反之為修改商品品項
         data_path = path + pre_product_id + '/data.data'
@@ -88,16 +100,13 @@ def save_customer_product_profile(data, path):
             chdir(path)
             rename(pre_product_id, product_id)
             chdir(ORIGIN_PATH)
-            #
-
 
 
 def rewrite_title_image(path, imabase64):
     """
-
-    :param path:
-    :param imabase64:
-    :return: not return
+    rewrite title image
+    :param path: title image file path
+    :param imabase64: new image base64 string
     """
     img = imgSrc2_cv2img(imabase64)
     imag_path = path+'title.jpg'
@@ -105,11 +114,21 @@ def rewrite_title_image(path, imabase64):
 
 
 def init_image_json_data(path, data):
+    """
+    Create image json data.
+    :param path: file path
+    :param data: a data type as dict.
+    """
     init_json_file(path)
     overwrite_json_data(path, data)
 
 
 def get_json_data(path):
+    """
+    get a json file data as dict where at path.
+    :param path: file path
+    :return: json data
+    """
     with open(path) as json_file:
         data = json.load(json_file)
         dic = data
@@ -117,11 +136,20 @@ def get_json_data(path):
 
 
 def init_json_file(path):
+    """
+    create a json data where at path.
+    :param path: file path
+    """
     with open(path, 'w') as outfile:
         json.dump({}, outfile)
 
 
 def overwrite_json_data(path, dic):
+    """
+    use dic to overwrite json data where at path.
+    :param path: file path
+    :param dic: a data type as dict.
+    """
     with open(path, 'w') as outfile:
         json.dump(dic, outfile)
 
@@ -144,7 +172,7 @@ def rewrite_json_data(path, data):
 
 def rewrite_json_image_count(path, count):
     """
-
+    rewrite json data image count .
     :param path: type: String , json file path
     :param count: type: String , value of productID has how many image
     :return: not return
@@ -169,7 +197,6 @@ def imgSrc2_cv2img(src):
 def base64toimg(string):
     """
     base64 to np type image
-
     :param string: base64 string
     :return: numpy image
     """
@@ -191,6 +218,11 @@ def base64toimg(string):
 
 
 def cv2_strbase64(image):
+    """
+    image to base64,and plus "data:image/jpeg;base64,"
+    :param image: cv2.imread image
+    :return: image to base64
+    """
     base64_str = cv2.imencode('.jpg', image)[1].tostring()
     base64_str = base64.b64encode(base64_str)
     output = PREBASE64+str(base64_str).split("'")[1]
@@ -230,11 +262,17 @@ def generate_random_str(randomlength):
 
 
 def create_lock_file(lock_path):
+    """
+    create a lockfile
+    """
     with open(lock_path, 'w') as lock:
         pass
 
 
 def delete_lock_file(lock_path):
+    """
+    delete a lockfile
+    """
     remove(lock_path)
 
 
